@@ -1,2 +1,3 @@
 #Proyecto Final--R
-##Prueba 
+##Integrantes: Johanna Vinueza, Erika Neira, Ninibeth Banchon
+
