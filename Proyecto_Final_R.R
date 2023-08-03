@@ -5,3 +5,5 @@
 #Paquetes y librerias----
 
 #Ya acabemos la reunion jeje
+
+#Estamos lista para mañana?
