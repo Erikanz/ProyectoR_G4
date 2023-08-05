@@ -4,8 +4,8 @@
 
 #Paquetes y librerias----
 
-
-
+paquetes<-c("openxlsx", "magrittr", "tidyverse", "readr", "dplyr", "readxl")
+lapply(paquetes, library, character.only=TRUE)
 
 #Cargar datos----
 
