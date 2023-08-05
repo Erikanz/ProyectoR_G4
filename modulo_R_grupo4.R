@@ -15,7 +15,7 @@ str(balance_2014_df)
 
 #Tareas especificas
 
-#1 
+#1-----------------------------------------------------------------------------------------
 #Se filtra y se toma valores positivos para luego proceder a calcular los indicadores de liquidez y solvencia y evitar divisiones entre cero
 balance_2014_filter<-balance_2014_df %>% mutate(v539=ifelse(v539>0, v539, NA), v599=ifelse(v599>0, v599, NA), v698=ifelse(v698>0, v698, NA), v498=ifelse(v498>0, v498, NA)) %>% 
 filter(!is.na(v539) & !is.na(v599) & !is.na(v698) & !is.na(v498)) %>%  view("balance_2014_filter")
@@ -34,7 +34,21 @@ str(empresas_df1)
 empresas<-tibble::as_tibble(empresas_df1)
 glimpse(empresas)
 
+#2--------------------------------------------------------------------------------------
 
+tabla1_conteo_act.econo<-empresas %>% group_by(Actividad_economica) %>% count() 
+tabla1_actividad_econ<-data.frame(tabla1_conteo_act.econo)%>% view("tabla_activ_economica")
+
+tabla2_conteo_act.econo<-empresas %>% group_by(Actividad_economica, Canton) %>% count() %>% view("actividad_economica_por_canton")
+tabla2_conteo_act.econo<-data.frame(tabla2_conteo_act.econo)%>% view("tabla_activ_economica")
+
+#Convertir col a fila- tabla
+pivot_tablafinal_df<-tabla2_conteo_act.econo %>%
+  pivot_wider(names_from= Actividad_economica, values_from = n ) %>% view()
+
+#Pendientes:
+# Sacar la suma por actividad economica, i,e el total y hacer el cambio a la descripcion de codigo ciiu
+# filtro por pequenas, grandes y medianas empresas del endeudamiento del activo 
 
 
 
