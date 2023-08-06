@@ -15,8 +15,8 @@ str(balance_2014_df)
 #Transformamos a tibble
 
 ciiu_table<-read.xlsx("Data/ciiu.xlsx")%>% view("ciuu")
-#ciiu_df2<-tibble::as_tibble(ciiu_table)
-#glimpse(ciiu_table)
+ciiu_df2<-tibble::as_tibble(ciiu_table)
+glimpse(ciiu_table)
 
 #Tareas especificas
 
@@ -106,6 +106,7 @@ empresas_final<-empresas_subac %>% inner_join(ciiu_df2, by = c("Actividad_econom
 
 
 
+#4-------------------------------------------------------------------------
 
 
 
