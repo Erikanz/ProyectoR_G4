@@ -65,6 +65,7 @@ Para el análisis de datos se cargaran los paquetes:....................
     El promedio del endeudamiento del activo de las micro + pequeñas empresas en el Ecuador es significativamente mayor que el de las grandes empresas. Mientras que las micro + pequeñas empresas tienen un promedio de endeudamiento del activo del 359.25, las grandes empresas registran un bajo índice de 18.73. Este bajo índice en las grandes empresas representa un elevado grado de independencia frente a sus acreedores, lo que indica una estructura financiera más segura y menos riesgosa en comparación con las micro + pequeñas empresas.
 
 2.  ***¿La liquidez por tipo de compañía es diferente entre aquellas empresas que tienen más de 60 trabajadores directos y que cuenta con 100 a 800 trabajadores administrativos?***
+    La liquidez de las empresas que tienen mas de 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos
 
 3.  ***Descripción del top 10 de empresas con mayor apalancamiento***
 
