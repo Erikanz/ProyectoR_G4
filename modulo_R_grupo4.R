@@ -55,21 +55,28 @@ pivot_tablafinal_df <- pivot_tablafinal_df %>%
 
 glimpse(pivot_tablafinal_df)
 
-#Adding a row which contain the sum by column and give it name
+#Adding a row which contain the sum by column
 
 table_sum_bycolumn<-pivot_tablafinal_df %>% select(-Canton) %>% summarise(across(everything(), sum)) %>% view("sum")
 
 
 #Tabla final que resume el numero total de empresas por actividad economica y por actividad economica por canton
 
-
 table_summarize<- pivot_tablafinal_df %>% bind_rows(table_sum_bycolumn) %>% view("Tabla_resumen")
 total_count<- "Total"
+
+#Table como un tibble
 table_Resumen_final<-table_summarize %>% mutate(Canton=ifelse(is.na(Canton),total_count , Canton))  %>% view("Tabla_resumen1")
+glimpse(table_Resumen_final)
+
+#3-------------------------------------------------------------------------------------------------------------------------------
 
 
 
- #hacer el cambio a la descripcion de codigo ciiu
+
+
+#Pendientes:
+#hacer el cambio de codigo ciiu nivel 1 y nivel 6 a descripcion
 # filtro por pequenas, grandes y medianas empresas del endeudamiento del activo 
 
 
