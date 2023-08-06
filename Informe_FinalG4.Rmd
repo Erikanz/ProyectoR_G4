@@ -2,7 +2,9 @@
 title: "Informe_Final"
 author: "Erika Neira, Ninibeth Banchon, Johanna Vinueza"
 date: "2023-08-05"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{=html}
@@ -30,9 +32,14 @@ Para realizar este análisis, utilizaremos el lenguaje de programación R, lo qu
 
 Mediante este proyecto, podremos tomar decisiones informadas sobre las empresas analizadas y evaluar su desempeño financiero con una perspectiva más amplia. La combinación de estos indicadores con el análisis detallado de diversas variables nos brindará una visión más completa y precisa sobre la salud financiera de las empresas en cuestión.
 
+
+___
+
 ### Objetivo
 
 Nuestro objetivo es promover el conocimiento y la comprensión en el ámbito financiero, proporcionando información relevante a inversionistas, directivos y a todas aquellas personas interesadas en conocer la situación financiera de las empresas ecuatorianas que estamos estudiando. Además, este proyecto tiene como propósito fomentar el desarrollo de habilidades analíticas y de programación en R entre las becarias, para que puedan destacarse en el competitivo mundo financiero y empresarial.
+
+___
 
 ### Descripción de los datos
 
@@ -43,6 +50,8 @@ El uso de datos proporcionados por la Superintendencia de Compañías garantiza 
 Esta base de datos, contiene información clave sobre cuentas contables y variables, facilitando el análisis financiero. Cada empresa está identificada por un registro único de contribuyentes, lo que proporciona una visión rápida de su estado operativo. Además, se detalla el tipo de compañía, permitiendo su clasificación según su naturaleza jurídica y actividad comercial. También se incluye la fecha de constitución, lo que ayuda a rastrear su tiempo de existencia.
 
 Para brindar una visión más completa, la base de datos contiene datos geográficos precisos, como la ubicación de la sede principal en provincia, cantón y ciudad. Además, se ha categorizado el nivel de la empresa, proporcionando información sobre su tamaño y alcance.
+
+___
 
 ### Análisis
 
@@ -65,6 +74,8 @@ Para el análisis de datos se cargaran los paquetes:....................
 3.  Gráficamente muestra el comparativo de los indicadores financieros de liquidez y solvencia por Status y provincia.
 
 4.  Gráficamente muestra el comparativo de los indicadores financieros de liquidez y sovencia por tipo de empresa.
+
+___
 
 ### Conclusión
 
