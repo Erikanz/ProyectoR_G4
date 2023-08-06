@@ -32,14 +32,13 @@ Para realizar este análisis, utilizaremos el lenguaje de programación R, lo qu
 
 Mediante este proyecto, podremos tomar decisiones informadas sobre las empresas analizadas y evaluar su desempeño financiero con una perspectiva más amplia. La combinación de estos indicadores con el análisis detallado de diversas variables nos brindará una visión más completa y precisa sobre la salud financiera de las empresas en cuestión.
 
-
-___
+------------------------------------------------------------------------
 
 ### Objetivo
 
 Nuestro objetivo es promover el conocimiento y la comprensión en el ámbito financiero, proporcionando información relevante a inversionistas, directivos y a todas aquellas personas interesadas en conocer la situación financiera de las empresas ecuatorianas que estamos estudiando. Además, este proyecto tiene como propósito fomentar el desarrollo de habilidades analíticas y de programación en R entre las becarias, para que puedan destacarse en el competitivo mundo financiero y empresarial.
 
-___
+------------------------------------------------------------------------
 
 ### Descripción de los datos
 
@@ -51,7 +50,7 @@ Esta base de datos, contiene información clave sobre cuentas contables y variab
 
 Para brindar una visión más completa, la base de datos contiene datos geográficos precisos, como la ubicación de la sede principal en provincia, cantón y ciudad. Además, se ha categorizado el nivel de la empresa, proporcionando información sobre su tamaño y alcance.
 
-___
+------------------------------------------------------------------------
 
 ### Análisis
 
@@ -75,7 +74,7 @@ Para el análisis de datos se cargaran los paquetes:....................
 
 4.  Gráficamente muestra el comparativo de los indicadores financieros de liquidez y sovencia por tipo de empresa.
 
-___
+------------------------------------------------------------------------
 
 ### Conclusión
 
