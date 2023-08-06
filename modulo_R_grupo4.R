@@ -10,8 +10,13 @@ lapply(paquetes, library, character.only=TRUE)
 #Exportar datos----
 
 balance_2014_df<-read.xlsx("Data/balances_2014.xlsx")%>% view("balance_2014")
-
 str(balance_2014_df)
+
+#Transformamos a tibble
+
+ciiu_table<-read.xlsx("Data/ciiu.xlsx")%>% view("ciuu")
+#ciiu_df2<-tibble::as_tibble(ciiu_table)
+#glimpse(ciiu_table)
 
 #Tareas especificas
 
@@ -52,7 +57,7 @@ comparacion_liquidez <- comparativa_liquidez %>%
   summarise(Media_Liquidez_Corriente = mean(Liquidez_Corriente))
 
 # Convertir a tibble
-empresas<-tibble::as_tibble(empresas_df1)
+empresas<-tibble::as_tibble(empresas_df1) %>% view("empresas")
 glimpse(empresas)
 
 #2--------------------------------------------------------------------------------------
@@ -92,13 +97,14 @@ glimpse(table_Resumen_final)
 
 #3-------------------------------------------------------------------------------------------------------------------------------
 
+#Cambio de codigos subactividad y actividad_economica a sus respectivas descripciones
+
+empresas_subac<-empresas_df1 %>% inner_join(ciiu_df2, by = c("Subactividad"="CODIGO"))%>% mutate(Subactividad=DESCRIPCION) %>% select(-c(DESCRIPCION, NIVEL)) %>% view("change_Subac")
+  
+empresas_final<-empresas_subac %>% inner_join(ciiu_df2, by = c("Actividad_economica"="CODIGO")) %>% mutate(Actividad_economica=DESCRIPCION) %>% select(-c(DESCRIPCION, NIVEL)) %>% view("final_table")
 
 
 
-
-#Pendientes:
-#hacer el cambio de codigo ciiu nivel 1 y nivel 6 a descripcion
-# filtro por pequenas, grandes y medianas empresas del endeudamiento del activo 
 
 
 
