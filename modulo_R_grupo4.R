@@ -87,7 +87,12 @@ table_Resumen_final<-table_summarize %>% mutate(Canton=ifelse(is.na(Canton),tota
 glimpse(table_Resumen_final)
 
 #3-------------------------------------------------------------------------------------------------------------------------------
-#Graficas
+#Grafico de barras para indicador de liquidez
+
+ggplot(empresas, aes(x = Status, y = Liquidez_Corriente, fill = Provincia)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Comparativo de Indicador de Liquidez Corriente",
+       x = "Status", y = "Liquidez Corriente") 
 
 
 #4--------------------------------------------------------------------------------------------------
