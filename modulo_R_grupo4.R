@@ -16,7 +16,7 @@ str(balance_2014_df)
 
 ciiu_table<-read.xlsx("Data/ciiu.xlsx")%>% view("ciuu")
 ciiu_df2<-tibble::as_tibble(ciiu_table)
-glimpse(ciiu_table)
+glimpse(ciiu_df2)
 
 #Tareas especificas
 
@@ -59,6 +59,7 @@ tabla1_actividad_econ<-data.frame(tabla1_conteo_act.econo)%>% view("tabla_activ_
 tabla2_conteo_act.econo<-empresas %>% group_by(Actividad_economica, Canton) %>% count() %>% view("actividad_economica_por_canton")
 tabla2_conteo_act.econo<-data.frame(tabla2_conteo_act.econo)%>% view("tabla_activ_economica")
 
+
 #Una sola tabla
 #Convertir de col a fila
 pivot_tablafinal_df<-tabla2_conteo_act.econo %>%
@@ -67,6 +68,7 @@ pivot_tablafinal_df<-tabla2_conteo_act.econo %>%
 #Reemplazando los NA por zero para obtener el total 
 pivot_tablafinal_df <- pivot_tablafinal_df %>%
   mutate(across(everything(), ~replace_na(., 0))) %>% view("sin NA")
+
 
 glimpse(pivot_tablafinal_df)
 
