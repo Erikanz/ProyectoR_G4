@@ -89,10 +89,38 @@ glimpse(table_Resumen_final)
 #3-------------------------------------------------------------------------------------------------------------------------------
 #Grafico de barras para indicador de liquidez
 
-ggplot(empresas, aes(x = Status, y = Liquidez_Corriente, fill = Provincia)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Comparativo de Indicador de Liquidez Corriente",
-       x = "Status", y = "Liquidez Corriente") 
+
+# First, calculate the mean Liquidez_Corriente for each province
+mean_liquidez_by_province <- aggregate(Liquidez_Corriente ~ Provincia, data = empresas, FUN = mean)
+
+# Sort the provinces based on mean Liquidez_Corriente in descending order
+top_provinces <- head(mean_liquidez_by_province[order(-mean_liquidez_by_province$Liquidez_Corriente), ], 5)
+
+# Filter the data to keep only the rows corresponding to the top provinces
+empresas_top_provinces <- subset(empresas, Provincia %in% top_provinces$Provincia)
+
+
+
+ggplot(empresas_top_provinces, aes(x=Provincia, y=Liquidez_Corriente)) + 
+  geom_bar(stat = "identity", position = "dodge") + labs(title="Comparativo de Indicador de Liquidez Corriente", x="Status", y="Liquidez" )+
+  facet_wrap(~Status)
+
+#Opcion 1
+
+empresas_unique_provincias <- distinct(empresas_top_provinces, Provincia, Status, .keep_all = TRUE)
+
+ggplot(empresas_unique_provincias, aes(x=Liquidez_Corriente, y=Provincia)) + 
+  geom_bar(stat = "identity", position = "dodge") + labs(title="Comparativo de Indicador de Liquidez Corriente", x="Pron", y="Liquidez" )+
+  facet_wrap(~Status)
+
+
+
+#Opcion 2
+empresas_unique_provincias <- distinct(empresas, Provincia, Status, .keep_all = TRUE)
+
+ggplot(empresas_unique_provincias, aes(x=Status, y=Liquidez_Corriente)) + 
+  geom_bar(stat = "identity", position = "dodge") + labs(title="Comparativo de Indicador de Liquidez Corriente", x="Pron", y="Liquidez" )+
+  facet_wrap(~Provincia)
 
 
 #4--------------------------------------------------------------------------------------------------
