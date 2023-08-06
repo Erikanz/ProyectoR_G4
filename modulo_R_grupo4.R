@@ -35,35 +35,6 @@ empresas_df1<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= si
 
 str(empresas_df1)
 
-<<<<<<< HEAD
-=======
-#tratando de ingresar el tamaño de la compañia
-empresas_df1<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion, Tipo_de_empresa=tipo,
-                                                País= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
-                                                Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6, tipo_cia =tamanio,
-                                                N_Direc = trab_direc, N_adm =trab_admin, Liquidez_Corriente= v345/v539, Endeudamiento_activo= v499/v599  ,
-                                                Endeudamiento_patrimonial= v499/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v599/v698) %>% view("empresas_df1")
-
-# análisis endeudamiento del activo entre pequeñas 
-comparacion_endeudamiento <- empresas_df1 %>%
-  mutate(
-    Categoria_Empresa = ifelse(tipo_cia %in% c("MICRO", "PEQUEÑA"), "MICRO + PEQUEÑA", "GRANDE")
-  ) %>%
-  group_by(Categoria_Empresa) %>%
-  summarise(Promedio_Endeudamiento_Activo = mean(Endeudamiento_activo))
-
-
-
-#realizando comparativa de liquidez
-comparativa_liquidez <- empresas_df1 %>% 
-  mutate(
-    Cumple_Condiciones = case_when(
-      is.na(N_Direc) | is.na(N_adm) ~ NA_character_,
-      N_Direc > 60 & N_adm >= 100 & N_adm <= 800 ~ "Cumple",
-      TRUE ~ "No Cumple"
-    )
-  )
->>>>>>> 0cea412c6b38a43ec763f6bce181822b3619365e
 
 
 #Cambio de codigos subactividad y actividad_economica a sus respectivas descripciones
@@ -119,6 +90,31 @@ glimpse(table_Resumen_final)
 
 #4--------------------------------------------------------------------------------------------------
 
+#tratando de ingresar el tamaño de la compañia
+table_Resumen_final<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion, Tipo_de_empresa=tipo,
+                                                País= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
+                                                Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6, tipo_cia =tamanio,
+                                                N_Direc = trab_direc, N_adm =trab_admin, Liquidez_Corriente= v345/v539, Endeudamiento_activo= v499/v599  ,
+                                                Endeudamiento_patrimonial= v499/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v599/v698) %>% view("empresas_df1")
 
+# análisis endeudamiento del activo entre pequeñas 
+comparacion_endeudamiento <- table_Resumen_final %>%
+  mutate(
+    Categoria_Empresa = ifelse(tipo_cia %in% c("MICRO", "PEQUEÑA"), "MICRO + PEQUEÑA", "GRANDE")
+  ) %>%
+  group_by(Categoria_Empresa) %>%
+  summarise(Promedio_Endeudamiento_Activo = mean(Endeudamiento_activo))
+
+
+
+#realizando comparativa de liquidez
+comparativa_liquidez <- table_Resumen_final %>% 
+  mutate(
+    Cumple_Condiciones = case_when(
+      is.na(N_Direc) | is.na(N_adm) ~ NA_character_,
+      N_Direc > 60 & N_adm >= 100 & N_adm <= 800 ~ "Cumple",
+      TRUE ~ "No Cumple"
+    )
+  )
 
 
