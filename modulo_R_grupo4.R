@@ -91,7 +91,7 @@ glimpse(table_Resumen_final)
 
 
 
-#4-------------------------------------------------------------------------
+#4--------------------------------------------------------------------------------------------------
 #tratando de ingresar el tamaño de la compañia
 empresas_df1<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion, Tipo_de_empresa=tipo,
                                                 País= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
