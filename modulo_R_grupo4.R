@@ -40,7 +40,7 @@ empresas_df1<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= si
 # análisis endeudamiento del activo entre pequeñas 
 comparacion_endeudamiento <- empresas_df1 %>%
   mutate(
-    Categoria_Empresa = ifelse(Tipo_de_empresa %in% c("MICRO", "PEQUEÑA"), "MICRO + PEQUEÑA", "GRANDE")
+    Categoria_Empresa = ifelse(tipo_cia %in% c("MICRO", "PEQUEÑA"), "MICRO + PEQUEÑA", "GRANDE")
   ) %>%
   group_by(Categoria_Empresa) %>%
   summarise(Promedio_Endeudamiento_Activo = mean(Endeudamiento_activo))
@@ -109,7 +109,6 @@ glimpse(table_Resumen_final)
 
 #Pendientes:
 #hacer el cambio de codigo ciiu nivel 1 y nivel 6 a descripcion
-# filtro por pequenas, grandes y medianas empresas del endeudamiento del activo 
 
 
 
