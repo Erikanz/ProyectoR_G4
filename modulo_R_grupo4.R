@@ -36,18 +36,40 @@ glimpse(empresas)
 
 #2--------------------------------------------------------------------------------------
 
+#Tabla total de empresas por actividad economica
 tabla1_conteo_act.econo<-empresas %>% group_by(Actividad_economica) %>% count() 
 tabla1_actividad_econ<-data.frame(tabla1_conteo_act.econo)%>% view("tabla_activ_economica")
 
+#Tabla total de actividad economica por canton
 tabla2_conteo_act.econo<-empresas %>% group_by(Actividad_economica, Canton) %>% count() %>% view("actividad_economica_por_canton")
 tabla2_conteo_act.econo<-data.frame(tabla2_conteo_act.econo)%>% view("tabla_activ_economica")
 
-#Convertir col a fila- tabla
+#Una sola tabla
+#Convertir de col a fila
 pivot_tablafinal_df<-tabla2_conteo_act.econo %>%
-  pivot_wider(names_from= Actividad_economica, values_from = n ) %>% view()
+  pivot_wider(names_from= Actividad_economica, values_from = n ) %>% view("table_1")
 
-#Pendientes:
-# Sacar la suma por actividad economica, i,e el total y hacer el cambio a la descripcion de codigo ciiu
+#Reemplazando los NA por zero para obtener el total 
+pivot_tablafinal_df <- pivot_tablafinal_df %>%
+  mutate(across(everything(), ~replace_na(., 0))) %>% view("sin NA")
+
+glimpse(pivot_tablafinal_df)
+
+#Adding a row which contain the sum by column and give it name
+
+table_sum_bycolumn<-pivot_tablafinal_df %>% select(-Canton) %>% summarise(across(everything(), sum)) %>% view("sum")
+
+
+#Tabla final que resume el numero total de empresas por actividad economica y por actividad economica por canton
+
+
+table_summarize<- pivot_tablafinal_df %>% bind_rows(table_sum_bycolumn) %>% view("Tabla_resumen")
+total_count<- "Total"
+table_Resumen_final<-table_summarize %>% mutate(Canton=ifelse(is.na(Canton),total_count , Canton))  %>% view("Tabla_resumen1")
+
+
+
+ #hacer el cambio a la descripcion de codigo ciiu
 # filtro por pequenas, grandes y medianas empresas del endeudamiento del activo 
 
 
