@@ -36,6 +36,17 @@ empresas_df1<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= si
                                                 Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6, tipo_cia =tamanio,
                                                 N_Direc = trab_direc, N_adm =trab_admin, Liquidez_Corriente= v345/v539, Endeudamiento_activo= v499/v599  ,
                                                 Endeudamiento_patrimonial= v499/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v599/v698) %>% view("empresas_df1")
+
+# análisis endeudamiento del activo entre pequeñas 
+comparacion_endeudamiento <- empresas_df1 %>%
+  mutate(
+    Categoria_Empresa = ifelse(Tipo_de_empresa %in% c("MICRO", "PEQUEÑA"), "MICRO + PEQUEÑA", "GRANDE")
+  ) %>%
+  group_by(Categoria_Empresa) %>%
+  summarise(Promedio_Endeudamiento_Activo = mean(Endeudamiento_activo))
+
+
+
 #realizando comparativa de liquidez
 comparativa_liquidez <- empresas_df1 %>% 
   mutate(
