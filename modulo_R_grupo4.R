@@ -30,6 +30,27 @@ empresas_df1<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= si
 
 str(empresas_df1)
 
+#tratando de ingresar el tamaño de la compañia
+empresas_df1<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion, Tipo_de_empresa=tipo,
+                                                País= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
+                                                Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6, tipo_cia =tamanio,
+                                                N_Direc = trab_direc, N_adm =trab_admin, Liquidez_Corriente= v345/v539, Endeudamiento_activo= v499/v599  ,
+                                                Endeudamiento_patrimonial= v499/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v599/v698) %>% view("empresas_df1")
+#realizando comparativa de liquidez
+comparativa_liquidez <- empresas_df1 %>% 
+  mutate(
+    Cumple_Condiciones = case_when(
+      is.na(N_Direc) | is.na(N_adm) ~ NA_character_,
+      N_Direc > 60 & N_adm >= 100 & N_adm <= 800 ~ "Cumple",
+      TRUE ~ "No Cumple"
+    )
+  )
+
+comparacion_liquidez <- comparativa_liquidez %>%
+  drop_na(Cumple_Condiciones) %>%
+  group_by(Tipo_de_empresa, Cumple_Condiciones) %>%
+  summarise(Media_Liquidez_Corriente = mean(Liquidez_Corriente))
+
 # Convertir a tibble
 empresas<-tibble::as_tibble(empresas_df1)
 glimpse(empresas)
