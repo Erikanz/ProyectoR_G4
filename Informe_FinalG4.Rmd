@@ -3,8 +3,8 @@ title: "Informe_Final"
 author: "Erika Neira, Ninibeth Banchon, Johanna Vinueza"
 date: "2023-08-05"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 
 ```{=html}
@@ -62,15 +62,17 @@ Para el análisis de datos se cargaran los paquetes:....................
 
 1.  ***¿El endeudamiento del activo fue mayor en empresas micro + pequeñas vs. grandes?***
 
-    El promedio del endeudamiento del activo de las micro + pequeñas empresas en el Ecuador es significativamente mayor que el de las grandes empresas. Mientras que las micro + pequeñas empresas tienen un promedio de endeudamiento del activo del 359,25, las grandes empresas registran un bajo índice de 18,73. Este bajo índice en las grandes empresas representa un elevado grado de independencia frente a sus acreedores, lo que indica una estructura financiera más segura y menos riesgosa en comparación con las micro + pequeñas empresas.
+    El promedio del endeudamiento del activo de las micro + pequeñas empresas en el Ecuador es significativamente menor que el de las grandes empresas. Mientras que las micro + pequeñas empresas tienen un promedio de endeudamiento del activo del 0.57 las grandes empresas registran un indice de 0.64. Este menor índice en las micro + pequeñas empresas representa un elevado grado de independencia frente a sus acreedores, lo que indica una estructura financiera más segura y menos riesgosa en comparación con las grandes empresas.
 
 2.  ***¿La liquidez por tipo de compañía es diferente entre aquellas empresas que tienen más de 60 trabajadores directos y que cuenta con 100 a 800 trabajadores administrativos?***
 
     El promedio de liquidez de las empresas anónimas que tienen mas de 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos es de 1,95 a diferencia de las otras empresas anónimas con menos trabajadores que tienen un indice promedio de liquidez de 16,40 y aunque este índice muestra una mayor capacidad de este ultimo grupo de emopresas para hacer frente a sus vencimientos de corto plazo, un exceso de liquidez puede significar que la empresa no está invirtiendo eficientemente sus recursos, lo que podría afectar su rentabilidad a largo plazo.
 
-   Por otro lado, el promedio de liquidez de las empresas de Sucursal extranjera, que tienen más de 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos, es de 2,60. En contraste con  las empresas de sucursal extranjera con menos personal que  tienen un índice de 5,37. Este coeficiente de liquidez más alto sugiere que estas últimas empresas extranjeras tendrán mayores posibilidades de efectuar sus pagos de corto plazo de manera oportuna y solvente.
+Por otro lado, el promedio de liquidez de las empresas de Sucursal extranjera, que tienen más de 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos, es de 2,60. En contraste con las empresas de sucursal extranjera con menos personal que tienen un índice de 5,37. Este coeficiente de liquidez más alto sugiere que estas últimas empresas extranjeras tendrán mayores posibilidades de efectuar sus pagos de corto plazo de manera oportuna y solvente.
 
 3.  ***Descripción del top 10 de empresas con mayor apalancamiento***
+
+    En el Top 10 de las empresas con mayor apalancamiento en su mayoria son empresas anonimas micro o pequeñas empresas y que se encuentran activas asi como podemos indicar que 7 de estas se encuentran unicadas en la provincia del Guayas y cuentan en promedio con 1 directivo y como maximo 5 trabajadores administrativos.
 
 **Parte 3 - Tareas específicas**
 

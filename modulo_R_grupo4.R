@@ -3,10 +3,6 @@
 ##Grupo 4 - Parte 4
 
 #Paquetes y librerias----
-install.packages("knitr")
-library(knitr)
-install.packages("tinytex")
-tinytex::install_tinytex()
 
 paquetes<-c("openxlsx", "magrittr", "tidyverse", "readr", "dplyr", "readxl")
 lapply(paquetes, library, character.only=TRUE)
@@ -51,6 +47,9 @@ empresas_final<-empresas_subac %>% inner_join(ciiu_df2, by = c("Actividad_econom
 # Convertir a tibble
 empresas<-tibble::as_tibble(empresas_final) %>% view("empresas")
 glimpse(empresas)
+
+tabla_resumen_pichincha <- tabla_resumen %>%
+  filter(Provincia == "Pichincha")
 
 
 #2--------------------------------------------------------------------------------------
@@ -189,23 +188,32 @@ empresas2<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situa
                                                 Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_con_tamaño")
 
 # análisis endeudamiento del activo entre pequeñas 
-comparacion_endeudamiento <- table_Resumen_final %>%
+comparacion_endeudamiento <- empresas2 %>%
   mutate(
     Categoria_Empresa = ifelse(tipo_cia %in% c("MICRO", "PEQUEÑA"), "MICRO + PEQUEÑA", "GRANDE")
   ) %>%
-  group_by(Categoria_Empresa) %>%
+  group_by(tipo_cia) %>%
   summarise(Promedio_Endeudamiento_Activo = mean(Endeudamiento_activo))
 
 
 
 #realizando comparativa de liquidez
-comparativa_liquidez <- table_Resumen_final %>% 
+
+comparativa_liquidez <- empresas2 %>% 
+  group_by(Tipo_de_empresa) %>% 
   mutate(
     Cumple_Condiciones = case_when(
       is.na(N_Direc) | is.na(N_adm) ~ NA_character_,
       N_Direc > 60 & N_adm >= 100 & N_adm <= 800 ~ "Cumple",
       TRUE ~ "No Cumple"
-    )
-  )
+    )   
+  ) %>% view ("liquidez_final")
 
+
+resultados_por_tipo <- comparativa_liquidez %>%
+  group_by(Tipo_de_empresa, Cumple_Condiciones) %>%
+  summarize(
+    Promedio_Endeudamiento_Activo = mean(Endeudamiento_activo, na.rm = TRUE),
+    Promedio_Liquidez_Corriente = mean(Liquidez_Corriente, na.rm = TRUE)
+  )
 
