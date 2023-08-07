@@ -108,7 +108,7 @@ glimpse(table_Resumen_final)
 
 ##GRAFICA POR LIQUIDEZ CORRIENTE SEGUN STATUS Y PROVINCIA EXCLUYENDO MANABI POR DISTORCIONAR LA GRAFICA
 
-ggplot(table_Resumen_final1, aes(x = Provincia, y = Liquidez_Corriente, fill = Status)) +
+ggplot(empresas, aes(x = Provincia, y = Liquidez_Corriente, fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Índice de Liquidez Corriente por Status y Provincia",
        x = "Provincia", y = "Liquidez Corriente") +
@@ -128,15 +128,17 @@ ggplot(table_Resumen_final , aes(x = Provincia, y = Endeudamiento_activo, fill =
 
 #4--------------------------------------------------------------------------------------------------
 
+
+#Para responder preguntas
 #tratando de ingresar el tamaño de la compañia
-table_Resumen_final1<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion, Tipo_de_empresa=tipo,
+empresas2<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion, Tipo_de_empresa=tipo,
                                                 País= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
                                                 Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6, tipo_cia =tamanio,
                                                 N_Direc = trab_direc, N_adm =trab_admin, Liquidez_Corriente= v345/v539, Endeudamiento_activo= v599/v499  ,
-                                                Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_df1")
+                                                Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_con_tamano")
 
 # análisis endeudamiento del activo entre pequeñas 
-comparacion_endeudamiento <- table_Resumen_final %>%
+comparacion_endeudamiento <- table_Resumen_fin %>%
   mutate(
     Categoria_Empresa = ifelse(tipo_cia %in% c("MICRO", "PEQUEÑA"), "MICRO + PEQUEÑA", "GRANDE")
   ) %>%
