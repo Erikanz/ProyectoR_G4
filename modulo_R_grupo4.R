@@ -126,51 +126,16 @@ ggplot(summarized_data_0, aes(x = Provincia  , y = Mean_Liquidez_Corriente , fil
 summarized_data_1 <- empresas %>%
   group_by(Provincia, Status) %>% summarize(Mean_Endeudamiento_activo = mean(Endeudamiento_activo, na.rm = TRUE)) %>% view("t2")
 
-<<<<<<< HEAD
-
-#Opcion 1
-
-empresas_unique_provincias <- distinct(empresas_top_provinces, Provincia, Status, .keep_all = TRUE)
-
-ggplot(empresas_unique_provincias, aes(x=Liquidez_Corriente, y=Provincia)) + 
-  geom_bar(stat = "identity", position = "dodge") + labs(title="Comparativo de Indicador de Liquidez Corriente", x="Pron", y="Liquidez" )+
-  facet_wrap(~Status)
-
-ggplot(empresas_unique_provincias, aes(x = Liquidez_Corriente, y = Provincia)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Comparativo de Indicador de Liquidez Corriente",
-       x = "Pron", y = "Liquidez") +
-  facet_grid(Status ~ ., scales = "free_y", space = "free_y") +
-  theme(axis.text.y = element_text(hjust = 0)) +
-  coord_flip()
-
-
-#Opcion 2
-empresas_unique_provincias <- distinct(empresas, Provincia, Status, .keep_all = TRUE)
-
-ggplot(empresas_unique_provincias, aes(x=Status, y=Liquidez_Corriente)) + 
-  geom_bar(stat = "identity", position = "dodge") + labs(title="Comparativo de Indicador de Liquidez Corriente", x="Pron", y="Liquidez" )+
-  facet_wrap(~Provincia)
-
-
-##GRAFICA POR LIQUIDEZ CORRIENTE SEGUN STATUS Y PROVINCIA EXCLUYENDO MANABI POR DISTORCIONAR LA GRAFICA
-
-ggplot(table_Resumen_final1, aes(x = Provincia, y = Liquidez_Corriente, fill = Status)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Índice de Liquidez Corriente por Status y Provincia",
-       x = "Provincia", y = "Liquidez Corriente") +
-=======
 ggplot(summarized_data_1, aes(x = Provincia, y = Mean_Endeudamiento_activo, fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") + 
   labs(title = "Promedio de Índice de Endeudamiento del activo por Provincia y Status",
        x = "Provincia", y = "Promedio de Endeudamiento de activo") +
->>>>>>> 1a96f0704bd8658df91e99bb2c2e92c4a3dc0749
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_fill_discrete(name = "Status") + facet_grid(~ Provincia, scales = "free_x", space = "free_x")
 
 #Grafica de Solvencia por Status y Provincia: Endeudamiento Patrimonial
 
-<<<<<<< HEAD
+
 ##GRAFICA POR ENDEUDAMIENTO DE ACTIVO SEGUN STATUS Y PROVINCIA EXCLUYENDO MANABI POR DISTORCIONAR LA GRAFICA
 
 ggplot(table_Resumen_final1 , aes(x = Provincia, y = Endeudamiento_activo, fill = Status)) +
