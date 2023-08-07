@@ -91,41 +91,8 @@ glimpse(empresas)
 
 ```
 
-Output:
-```{r}
-# A tibble: 6 × 17
-  Empresas         Status Tipo_de_empresa País  Provincia Canton Ciudad Actividad_economica
-  <chr>            <chr>  <chr>           <chr> <chr>     <chr>  <chr>  <chr>              
-1 ACEITES TROPICA… ACTIVA ANÓNIMA         ECUA… SANTO DO… SANTO… SANTO… AGRICULTURA, GANAD…
-2 ACERIA DEL ECUA… ACTIVA ANÓNIMA         ECUA… PICHINCHA QUITO  QUITO  INDUSTRIAS MANUFAC…
-3 ACERO COMERCIAL… ACTIVA ANÓNIMA         ECUA… PICHINCHA QUITO  QUITO  COMERCIO AL POR MA…
-4 AGENCIAS Y DIST… ACTIVA ANÓNIMA         ECUA… PICHINCHA QUITO  QUITO  COMERCIO AL POR MA…
-5 AGENCIAS Y REPR… ACTIVA ANÓNIMA         ECUA… PICHINCHA QUITO  QUITO  COMERCIO AL POR MA…
-6 ALMACENES EL GL… ACTIVA ANÓNIMA         ECUA… PICHINCHA QUITO  QUITO  COMERCIO AL POR MA…
-# ℹ 9 more variables: Subactividad <chr>, tipo_cia <chr>, N_Direc <dbl>, N_adm <dbl>,
-#   Liquidez_Corriente <dbl>, Endeudamiento_activo <dbl>, Endeudamiento_patrimonial <dbl>,
-#   Endeudamiento_activo_fijo <dbl>, Apalancamiento <dbl>
-
-```
-
 Para la realización de la tabla con la información resumida. Usamos el comando pivot_wider para convertir una columna en fila y poder ir adecuandola. Es así que diseñamos una tabla que contiene como columnas a la actividad económica y como filas los cantones. La variable de interes es el conteo o numero de empresas de actividad economica por canton y al final de la tabla hemos añadido una fila que contiene la suma de cada actividad económica la cual corresponde al total de empresas por actividad economica. El siguiente codigo muetra la tabla
 
-```{r}
-table_Resumen_final<-table_summarize %>% mutate(Canton=ifelse(is.na(Canton),total_count , Canton))  %>% view("Tabla_resumen1")
-glimpse(table_Resumen_final)
-```
-
-Output:
-```{r}
-Rows: 396
-Columns: 20
-Groups: Canton [198]
-$ Canton                                                                                      <chr> …
-$ `ACTIVIDADES DE ALOJAMIENTO Y DE SERVICIO DE COMIDAS.`                                      <int> …
-$ `ACTIVIDADES DE ATENCIÓN DE LA SALUD HUMANA Y DE ASISTENCIA SOCIAL.`                        <int> …
-$ `ACTIVIDADES DE SERVICIOS ADMINISTRATIVOS Y DE APOYO.` 
-
-```
 
 Para las gráficas solicitadas, usamos ggplot y realizamos algunos filtros para las variables de interes sobre el tibble empresas y obtuvimos lo siguiente:
 
