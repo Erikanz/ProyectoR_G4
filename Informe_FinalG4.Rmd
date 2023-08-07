@@ -131,13 +131,28 @@ $ `ACTIVIDADES DE SERVICIOS ADMINISTRATIVOS Y DE APOYO.`
 
 1.  ***¿El endeudamiento del activo fue mayor en empresas micro + pequeñas vs. grandes?***
 
+<<<<<<< HEAD
     El promedio del endeudamiento del activo de las micro + pequeñas empresas en el Ecuador es significativamente menor que el de las grandes empresas. Mientras que las micro + pequeñas empresas tienen un promedio de endeudamiento del activo del 0.57 las grandes empresas registran un indice de 0.64. Este menor índice en las micro + pequeñas empresas representa un elevado grado de independencia frente a sus acreedores, lo que indica una estructura financiera más segura y menos riesgosa en comparación con las grandes empresas.
+=======
+<<<<<<< HEAD
+    El promedio del endeudamiento del activo de las micro + pequeñas empresas en el Ecuador es significativamente mayor que el de las grandes empresas. Mientras que las micro + pequeñas empresas tienen un promedio de endeudamiento del activo del 359.25, las grandes empresas registran un bajo índice de 18.73. Este bajo índice en las grandes empresas representa un elevado grado de independencia frente a sus acreedores, lo que indica una estructura financiera más segura y menos riesgosa en comparación con las micro + pequeñas empresas.
+
+2.  ***¿La liquidez por tipo de compañía es diferente entre aquellas empresas que tienen más de 60 trabajadores directos y que cuenta con 100 a 800 trabajadores administrativos?***
+    La liquidez de las empresas que tienen mas de 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos
+=======
+    El promedio del endeudamiento del activo de las micro + pequeñas empresas en el Ecuador es significativamente mayor que el de las grandes empresas. Mientras que las micro + pequeñas empresas tienen un promedio de endeudamiento del activo del 359,25, las grandes empresas registran un bajo índice de 18,73. Este bajo índice en las grandes empresas representa un elevado grado de independencia frente a sus acreedores, lo que indica una estructura financiera más segura y menos riesgosa en comparación con las micro + pequeñas empresas.
+>>>>>>> 1a96f0704bd8658df91e99bb2c2e92c4a3dc0749
 
 2.  ***¿La liquidez por tipo de compañía es diferente entre aquellas empresas que tienen más de 60 trabajadores directos y que cuenta con 100 a 800 trabajadores administrativos?***
 
     El promedio de liquidez de las empresas anónimas que tienen mas de 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos es de 1,95 a diferencia de las otras empresas anónimas con menos trabajadores que tienen un indice promedio de liquidez de 16,40 y aunque este índice muestra una mayor capacidad de este ultimo grupo de emopresas para hacer frente a sus vencimientos de corto plazo, un exceso de liquidez puede significar que la empresa no está invirtiendo eficientemente sus recursos, lo que podría afectar su rentabilidad a largo plazo.
 
+<<<<<<< HEAD
 Por otro lado, el promedio de liquidez de las empresas de Sucursal extranjera, que tienen más de 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos, es de 2,60. En contraste con las empresas de sucursal extranjera con menos personal que tienen un índice de 5,37. Este coeficiente de liquidez más alto sugiere que estas últimas empresas extranjeras tendrán mayores posibilidades de efectuar sus pagos de corto plazo de manera oportuna y solvente.
+=======
+   Por otro lado, el promedio de liquidez de las empresas de Sucursal extranjera, que tienen más de 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos, es de 2,60. En contraste con  las empresas de sucursal extranjera con menos personal que  tienen un índice de 5,37. Este coeficiente de liquidez más alto sugiere que estas últimas empresas extranjeras tendrán mayores posibilidades de efectuar sus pagos de corto plazo de manera oportuna y solvente.
+>>>>>>> d43070d492def389462e712537e1c5b8949e4abe
+>>>>>>> 1a96f0704bd8658df91e99bb2c2e92c4a3dc0749
 
 3.  ***Descripción del top 10 de empresas con mayor apalancamiento***
 
@@ -157,7 +172,15 @@ Por otro lado, el promedio de liquidez de las empresas de Sucursal extranjera, q
 
 ### Conclusión
 
-En conclusión, R representa una herramienta indispensable en el análisis de datos de empresas, Gracias a su amplia variedad de paquetes y librerías, R permite manipular y transformar grandes conjuntos de datos de manera eficiente y precisa. Además, su capacidad para realizar visualizaciones gráficas y estadísticas avanzadas facilita la identificación de patrones, tendencias y relaciones ocultas en los datos financieros. En relación al análisis del grupo de empresas en función de su liquidez y solvencia, se puede concluir que.......
+Despues de contestar las tres preguntas iniciales y visualizando las correspondientes tablas y gráficos a lo largo del desarrollo de este Proyecto final del Modulo R que fue trabajado sobre la base de Balances 2014 de la Superintendencia de Compañias, podemos concluir lo siguiente en relacion a las empresas en el Ecuador.
+
+- Las empresas micro + pequeñas en Ecuador tienden a mostrar un mayor endeudamiento en relación con su activo en comparación con las empresas grandes. Esto puede indicar diferentes enfoques de financiamiento según el tamaño.
+
+- Las empresas anónimas con más trabajadores directivos y administrativos presentan un índice de liquidez menor en comparación con las empresas con menos personal. Las empresas más grandes pueden tener una posición financiera más sólida y, por lo tanto, menos necesidad inmediata de liquidez.
+
+- Las sucursales extranjeras con más personal directivo y administrativo tienden a tener un coeficiente de liquidez más alto en comparación con las que tienen menos personal. Esto sugiere una mejor capacidad para cumplir con los compromisos financieros a corto plazo.
+
+En resumen, las empresas en Ecuador, especialmente las micro + pequeñas, pueden depender más del endeudamiento. Las empresas más grandes pueden tener una flexibilidad financiera superior y mantener niveles más altos de liquidez. Las sucursales extranjeras con más personal parecen estar mejor preparadas para enfrentar sus obligaciones financieras a corto plazo. Estas conclusiones se basan en análisis de datos y podrían variar según factores específicos de la industria y el contexto económico.
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
