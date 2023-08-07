@@ -46,6 +46,7 @@ empresas_final<-empresas_subac %>% inner_join(ciiu_df2, by = c("Actividad_econom
 
 # Convertir a tibble
 empresas<-tibble::as_tibble(empresas_final) %>% view("empresas")
+head(empresas)
 glimpse(empresas)
 
 tabla_resumen_pichincha <- tabla_resumen %>%
@@ -114,7 +115,7 @@ glimpse(table_Resumen_final)
 summarized_data_0 <- empresas %>%
   group_by(Provincia, Status) %>% summarize(Mean_Liquidez_Corriente = mean(Liquidez_Corriente, na.rm = TRUE)) 
 
-ggplot(summarized_data_0, aes(x = Provincia  , y = Mean_Liquidez_Corriente , fill = Status)) +
+fig1<-ggplot(summarized_data_0, aes(x = Provincia  , y = Mean_Liquidez_Corriente , fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Promedio de Índice de Liquidez Corriente por Provincia y Status",
        x = "Provincia", y = "Promedio por Liquidez Corriente") +
