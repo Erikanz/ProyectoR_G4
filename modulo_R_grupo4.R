@@ -252,17 +252,14 @@ empresas2<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situa
                                                 País= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
                                                 Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6, tipo_cia =tamanio,
                                                 N_Direc = trab_direc, N_adm =trab_admin, Liquidez_Corriente= v345/v539, Endeudamiento_activo= v599/v499  ,
-<<<<<<< HEAD
                                                 Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_con_tamaño")
 
 # análisis endeudamiento del activo entre pequeñas 
 comparacion_endeudamiento <- empresas2 %>%
-=======
-                                                Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_con_tamano")
+Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_con_tamano")
 
 # análisis endeudamiento del activo entre pequeñas 
 comparacion_endeudamiento <- table_Resumen_fin %>%
->>>>>>> 1a96f0704bd8658df91e99bb2c2e92c4a3dc0749
   mutate(
     Categoria_Empresa = ifelse(tipo_cia %in% c("MICRO", "PEQUEÑA"), "MICRO + PEQUEÑA", "GRANDE")
   ) %>%
