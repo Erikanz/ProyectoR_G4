@@ -3,6 +3,10 @@
 ##Grupo 4 - Parte 4
 
 #Paquetes y librerias----
+install.packages("knitr")
+library(knitr)
+install.packages("tinytex")
+tinytex::install_tinytex()
 
 paquetes<-c("openxlsx", "magrittr", "tidyverse", "readr", "dplyr", "readxl")
 lapply(paquetes, library, character.only=TRUE)
@@ -28,7 +32,7 @@ filter(!is.na(v539) & !is.na(v599) & !is.na(v698) & !is.na(v498)) %>%  view("bal
 
 #Se crea la base de datos con las variables solicitadas 
 empresas_df1<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion, Tipo_de_empresa=tipo,
-                    País= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
+                    Pais= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
                     Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6,
                     Liquidez_Corriente= v345/v539, Endeudamiento_activo= v599/v499  ,
                     Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_df1")
@@ -157,8 +161,7 @@ ggplot(empresas_unique_provincias, aes(x=Status, y=Liquidez_Corriente)) +
 
 
 ##GRAFICA POR LIQUIDEZ CORRIENTE SEGUN STATUS Y PROVINCIA EXCLUYENDO MANABI POR DISTORCIONAR LA GRAFICA
-table_Resumen_final_sin_manabi <- table_Resumen_final %>%
-  filter(Provincia != "MANABI")
+
 ggplot(table_Resumen_final1, aes(x = Provincia, y = Liquidez_Corriente, fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Índice de Liquidez Corriente por Status y Provincia",
@@ -168,9 +171,8 @@ ggplot(table_Resumen_final1, aes(x = Provincia, y = Liquidez_Corriente, fill = S
 
 
 ##GRAFICA POR ENDEUDAMIENTO DE ACTIVO SEGUN STATUS Y PROVINCIA EXCLUYENDO MANABI POR DISTORCIONAR LA GRAFICA
-table_Resumen_final_sin_manabi <- table_Resumen_final %>%
-  filter(Provincia != "ESMERALDAS")
-ggplot(table_Resumen_final , aes(x = Provincia, y = Endeudamiento_activo, fill = Status)) +
+
+ggplot(table_Resumen_final1 , aes(x = Provincia, y = Endeudamiento_activo, fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Índice de Endeudamiento del activo por Status y Provincia",
        x = "Provincia", y = "Endeudamiento del activo") +
@@ -180,11 +182,11 @@ ggplot(table_Resumen_final , aes(x = Provincia, y = Endeudamiento_activo, fill =
 #4--------------------------------------------------------------------------------------------------
 
 #tratando de ingresar el tamaño de la compañia
-table_Resumen_final1<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion, Tipo_de_empresa=tipo,
+empresas2<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion, Tipo_de_empresa=tipo,
                                                 País= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
                                                 Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6, tipo_cia =tamanio,
                                                 N_Direc = trab_direc, N_adm =trab_admin, Liquidez_Corriente= v345/v539, Endeudamiento_activo= v599/v499  ,
-                                                Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_df1")
+                                                Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_con_tamaño")
 
 # análisis endeudamiento del activo entre pequeñas 
 comparacion_endeudamiento <- table_Resumen_final %>%
