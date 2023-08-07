@@ -30,8 +30,8 @@ filter(!is.na(v539) & !is.na(v599) & !is.na(v698) & !is.na(v498)) %>%  view("bal
 empresas_df1<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion, Tipo_de_empresa=tipo,
                     País= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
                     Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6,
-                    Liquidez_Corriente= v345/v539, Endeudamiento_activo= v499/v599  ,
-                    Endeudamiento_patrimonial= v499/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v599/v698) %>% view("empresas_df1")
+                    Liquidez_Corriente= v345/v539, Endeudamiento_activo= v599/v499  ,
+                    Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_df1")
 
 str(empresas_df1)
 
@@ -60,6 +60,20 @@ tabla2_conteo_act.econo<-empresas %>% group_by(Actividad_economica, Canton) %>% 
 tabla2_conteo_act.econo<-data.frame(tabla2_conteo_act.econo)%>% view("tabla_activ_economica")
 
 
+#con el numero total de empresas listadas todas en una misma columna
+tabla2a_conteo_act.econo <- tabla2_conteo_act.econo %>%
+  group_by(Actividad_economica) %>%
+  summarise(No_compañias = n())
+
+
+total_compañias <- tabla2a_conteo_act.econo %>%
+  summarise(No_compañias = sum(No_compañias)) %>%
+  mutate(Actividad_economica = "Total")
+
+tabla2a_conteo_act.econo <- bind_rows(tabla2a_conteo_act.econo, total_compañias)
+
+
+
 #Una sola tabla
 #Convertir de col a fila
 pivot_tablafinal_df<-tabla2_conteo_act.econo %>%
@@ -77,71 +91,50 @@ glimpse(pivot_tablafinal_df)
 table_sum_bycolumn<-pivot_tablafinal_df %>% select(-Canton) %>% summarise(across(everything(), sum)) %>% view("sum")
 
 
-#Tabla final que resume el numero total de empresas por actividad economica y por actividad economica por canton
+#Tabla final que resume el número total de empresas por actividad económica y por actividad económica por cantón
 
 table_summarize<- pivot_tablafinal_df %>% bind_rows(table_sum_bycolumn) %>% view("Tabla_resumen")
-total_count<- "Total"
+total_count<- "Total"   ##esta ultima parte sale NA EN LA FILA enVez de TOTAL--
+
+
 
 #Table como un tibble
 table_Resumen_final<-table_summarize %>% mutate(Canton=ifelse(is.na(Canton),total_count , Canton))  %>% view("Tabla_resumen1")
 glimpse(table_Resumen_final)
 
 #3-------------------------------------------------------------------------------------------------------------------------------
-#Grafico de barras para indicador de liquidez
+#Gráfico de barras para indicador de liquidez
 
 
-#Posicion 1
-# First, calculate the mean Liquidez_Corriente for each province
-mean_liquidez_by_status <- aggregate(Liquidez_Corriente ~ Status, data = empresas, FUN = mean) %>% view("mean_by_status")
-
-# Sort the provinces based on mean Liquidez_Corriente in descending order
-top_provinces <- head(mean_liquidez_by_province[order(-mean_liquidez_by_province$Liquidez_Corriente), ], 5) %>% view("")
-
-# Filter the data to keep only the rows corresponding to the top provinces
-empresas_top_provinces <- subset(empresas, Provincia %in% top_provinces$Provincia) %>% view("")
-
-
-
-ggplot(empresas_top_provinces, aes(x=Liquidez_Corriente, y=Provincia)) + 
-  geom_bar(stat = "identity", position = "dodge") + labs(title="Comparativo de Indicador de Liquidez Corriente", x="Status", y="Liquidez" )+
-  facet_wrap(~Status)
-
-#Opcion 2
-
-empresas_unique_provincias <- empresas %>% distinct(Provincia, .keep_all = TRUE) %>% view("prueba")
-
-ggplot(empresas_unique_provincias, aes(x=Status, y=Liquidez_Corriente)) + 
-  geom_bar(stat = "identity", position = "dodge") + labs(title="Comparativo de Indicador de Liquidez Corriente", x="Pron", y="Liquidez" )+
-  facet_wrap(~Provincia)
-
-#Opcion 3
-
-ggplot(empresas, aes(x = Status, y = Liquidez_Corriente)) + 
-  geom_bar(stat = "identity", position = "dodge") + 
-  labs(title = "Comparativo de Indicador de Liquidez Corriente",
-       x = "Status",
-       y = "Liquidez") +
-  facet_wrap(~Provincia)
+##GRAFICA POR LIQUIDEZ CORRIENTE SEGUN STATUS Y PROVINCIA EXCLUYENDO MANABI POR DISTORCIONAR LA GRAFICA
+table_Resumen_final_sin_manabi <- table_Resumen_final %>%
+  filter(Provincia != "MANABI")
+ggplot(table_Resumen_final1, aes(x = Provincia, y = Liquidez_Corriente, fill = Status)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Índice de Liquidez Corriente por Status y Provincia",
+       x = "Provincia", y = "Liquidez Corriente") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_discrete(name = "Status")
 
 
-
-#Grafica 2
-
-
-ggplot(empresas, aes(x=Tipo_de_empresa, y=Liquidez_Corriente)) + 
-  geom_bar(stat = "identity", position = "dodge") + labs(title="Comparativo de Indicador de Liquidez Corriente", x="Pron", y="Liquidez" )+
-  facet_wrap(~Tipo_de_empresa)
-
-group_by_all(empresas$Tipo_de_empresa) %>% view("1")
+##GRAFICA POR ENDEUDAMIENTO DE ACTIVO SEGUN STATUS Y PROVINCIA EXCLUYENDO MANABI POR DISTORCIONAR LA GRAFICA
+table_Resumen_final_sin_manabi <- table_Resumen_final %>%
+  filter(Provincia != "ESMERALDAS")
+ggplot(table_Resumen_final , aes(x = Provincia, y = Endeudamiento_activo, fill = Status)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Índice de Endeudamiento del activo por Status y Provincia",
+       x = "Provincia", y = "Endeudamiento del activo") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_discrete(name = "Status")
 
 #4--------------------------------------------------------------------------------------------------
 
 #tratando de ingresar el tamaño de la compañia
-table_Resumen_final<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion, Tipo_de_empresa=tipo,
+table_Resumen_final1<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion, Tipo_de_empresa=tipo,
                                                 País= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
                                                 Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6, tipo_cia =tamanio,
-                                                N_Direc = trab_direc, N_adm =trab_admin, Liquidez_Corriente= v345/v539, Endeudamiento_activo= v499/v599  ,
-                                                Endeudamiento_patrimonial= v499/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v599/v698) %>% view("empresas_df1")
+                                                N_Direc = trab_direc, N_adm =trab_admin, Liquidez_Corriente= v345/v539, Endeudamiento_activo= v599/v499  ,
+                                                Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_df1")
 
 # análisis endeudamiento del activo entre pequeñas 
 comparacion_endeudamiento <- table_Resumen_final %>%
