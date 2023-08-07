@@ -131,10 +131,55 @@ Para las gráficas solicitadas, usamos ggplot y realizamos algunos filtros para 
 
 1. Liquidez y Solvencia por Status y Provincia 
 
+1.1 Liquidez Corriente
+```{r pressure, echo=FALSE}
+plot(fig0)
+```
+
+1.2 Endeudamiento Activo
 ```{r pressure, echo=FALSE}
 plot(fig1)
 ```
 
+1.2 Endeudamiento Patrinomial 
+```{r pressure, echo=FALSE}
+plot(fig2)
+```
+
+1.3 Endeudamiento activo fijo
+```{r pressure, echo=FALSE}
+plot(fig3)
+```
+
+
+1.4 Apalancamiento
+```{r pressure, echo=FALSE}
+plot(fig4)
+```
+
+2. Liquidez y Solvencia por Tipo de Empresa
+ 2.1 Liquidez Corriente
+ 
+```{r pressure, echo=FALSE}
+plot(fig5)
+```
+ 
+ 2.2 Endeudamiento Activo
+```{r pressure, echo=FALSE}
+plot(fig6)
+``` 
+ 2.3 Endeudamiento Patrinomial
+```{r pressure, echo=FALSE}
+plot(fig7)
+``` 
+ 2.4 Endeudamiento activo fijo
+```{r pressure, echo=FALSE}
+plot(fig8)
+``` 
+ 2.5 Apalancamiento
+```{r pressure, echo=FALSE}
+plot(fig9)
+```
 
 **Parte 2 - Preguntas de Investigación**
 
