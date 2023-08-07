@@ -103,7 +103,7 @@ table_Resumen_final<-table_summarize %>% mutate(Canton=ifelse(is.na(Canton),tota
 glimpse(table_Resumen_final)
 
 #3-------------------------------------------------------------------------------------------------------------------------------
-#Gráfico de barras para indicador de liquidez
+#Gráficos de barras
 
 
 ##GRAFICA POR LIQUIDEZ CORRIENTE SEGUN STATUS Y PROVINCIA EXCLUYENDO MANABI POR DISTORCIONAR LA GRAFICA
