@@ -89,39 +89,50 @@ glimpse(table_Resumen_final)
 #3-------------------------------------------------------------------------------------------------------------------------------
 #Grafico de barras para indicador de liquidez
 
-
+---------------------------------
+#Posicion 1
 # First, calculate the mean Liquidez_Corriente for each province
-mean_liquidez_by_province <- aggregate(Liquidez_Corriente ~ Provincia, data = empresas, FUN = mean)
+mean_liquidez_by_status <- aggregate(Liquidez_Corriente ~ Status, data = empresas, FUN = mean) %>% view("mean_by_status")
 
 # Sort the provinces based on mean Liquidez_Corriente in descending order
-top_provinces <- head(mean_liquidez_by_province[order(-mean_liquidez_by_province$Liquidez_Corriente), ], 5)
+top_provinces <- head(mean_liquidez_by_province[order(-mean_liquidez_by_province$Liquidez_Corriente), ], 5) %>% view("")
 
 # Filter the data to keep only the rows corresponding to the top provinces
-empresas_top_provinces <- subset(empresas, Provincia %in% top_provinces$Provincia)
+empresas_top_provinces <- subset(empresas, Provincia %in% top_provinces$Provincia) %>% view("")
 
 
 
-ggplot(empresas_top_provinces, aes(x=Provincia, y=Liquidez_Corriente)) + 
+ggplot(empresas_top_provinces, aes(x=Liquidez_Corriente, y=Provincia)) + 
   geom_bar(stat = "identity", position = "dodge") + labs(title="Comparativo de Indicador de Liquidez Corriente", x="Status", y="Liquidez" )+
   facet_wrap(~Status)
 
-#Opcion 1
-
-empresas_unique_provincias <- distinct(empresas_top_provinces, Provincia, Status, .keep_all = TRUE)
-
-ggplot(empresas_unique_provincias, aes(x=Liquidez_Corriente, y=Provincia)) + 
-  geom_bar(stat = "identity", position = "dodge") + labs(title="Comparativo de Indicador de Liquidez Corriente", x="Pron", y="Liquidez" )+
-  facet_wrap(~Status)
-
-
-
 #Opcion 2
-empresas_unique_provincias <- distinct(empresas, Provincia, Status, .keep_all = TRUE)
+
+empresas_unique_provincias <- empresas %>% distinct(Provincia, .keep_all = TRUE) %>% view("prueba")
 
 ggplot(empresas_unique_provincias, aes(x=Status, y=Liquidez_Corriente)) + 
   geom_bar(stat = "identity", position = "dodge") + labs(title="Comparativo de Indicador de Liquidez Corriente", x="Pron", y="Liquidez" )+
   facet_wrap(~Provincia)
 
+#Opcion 3
+
+ggplot(empresas, aes(x = Status, y = Liquidez_Corriente)) + 
+  geom_bar(stat = "identity", position = "dodge") + 
+  labs(title = "Comparativo de Indicador de Liquidez Corriente",
+       x = "Status",
+       y = "Liquidez") +
+  facet_wrap(~Provincia)
+--------------------------------------------------
+
+
+#Grafica 2
+
+
+ggplot(empresas, aes(x=Tipo_de_empresa, y=Liquidez_Corriente)) + 
+  geom_bar(stat = "identity", position = "dodge") + labs(title="Comparativo de Indicador de Liquidez Corriente", x="Pron", y="Liquidez" )+
+  facet_wrap(~Tipo_de_empresa)
+
+group_by_all(empresas$Tipo_de_empresa) %>% view("1")
 
 #4--------------------------------------------------------------------------------------------------
 
