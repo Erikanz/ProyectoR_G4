@@ -139,7 +139,7 @@ fig1<-ggplot(summarized_data_1, aes(x = Provincia, y = Mean_Endeudamiento_activo
 summarized_data_2 <- empresas %>%
   group_by(Provincia, Status) %>% summarize(Mean_Endeudamiento_patrimonial = mean(Endeudamiento_patrimonial, na.rm = TRUE)) %>% view("t3")
 
-ggplot(summarized_data_2, aes(x = Provincia, y = Mean_Endeudamiento_patrimonial, fill = Status)) +
+fig2<-ggplot(summarized_data_2, aes(x = Provincia, y = Mean_Endeudamiento_patrimonial, fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") + 
   labs(title = "Promedio de Índice de Endeudamiento patrimonial por Provincia y Status",
        x = "Provincia", y = "Promedio de Endeudamiento patromonial") +
@@ -152,7 +152,7 @@ ggplot(summarized_data_2, aes(x = Provincia, y = Mean_Endeudamiento_patrimonial,
 summarized_data_3 <- empresas %>%
   group_by(Provincia, Status) %>% summarize(Mean_Endeudamiento_activo_fijo = mean(Endeudamiento_activo_fijo, na.rm = TRUE)) %>% view("t4")
 
-ggplot(summarized_data_3, aes(x = Provincia, y = Mean_Endeudamiento_activo_fijo, fill = Status)) +
+fig3<-ggplot(summarized_data_3, aes(x = Provincia, y = Mean_Endeudamiento_activo_fijo, fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") + 
   labs(title = "Promedio de Índice de Endeudamiento activo fijo por Provincia y Status",
        x = "Provincia", y = "Promedio de Endeudamiento activo fijo") +
@@ -164,7 +164,7 @@ ggplot(summarized_data_3, aes(x = Provincia, y = Mean_Endeudamiento_activo_fijo,
 summarized_data_4 <- empresas %>%
   group_by(Provincia, Status) %>% summarize(Mean_Apalancamiento = mean(Apalancamiento, na.rm = TRUE)) %>% view("t5")
 
-ggplot(summarized_data_4, aes(x = Provincia, y = Mean_Apalancamiento, fill = Status)) +
+fig4<-ggplot(summarized_data_4, aes(x = Provincia, y = Mean_Apalancamiento, fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") + 
   labs(title = "Promedio de Índice de Apalancamiento por Provincia y Status",
        x = "Provincia", y = "Promedio de Apalancamiento") +
@@ -175,12 +175,13 @@ ggplot(summarized_data_4, aes(x = Provincia, y = Mean_Apalancamiento, fill = Sta
 #Gráficos correspondientes al indicador Liquidez y Solvencia por Tipo de Empresa
 
 
+
 #Grafico de Liquidez Corriente por tipo de empresa
 
 summarized_data_5 <- empresas %>%
   group_by(Tipo_de_empresa) %>% summarize(Mean_Liquidez_Corriente = mean(Liquidez_Corriente, na.rm = TRUE)) %>% view("Tte1")
 
-ggplot(summarized_data_5, aes(x = Tipo_de_empresa  , y = Mean_Liquidez_Corriente)) +
+fig5<-ggplot(summarized_data_5, aes(x = Tipo_de_empresa  , y = Mean_Liquidez_Corriente)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Promedio de Índice de Liquidez Corriente por Tipo de Empresa",
        x = "Tipo de Empresa", y = "Liquidez Corriente") +
@@ -192,7 +193,7 @@ ggplot(summarized_data_5, aes(x = Tipo_de_empresa  , y = Mean_Liquidez_Corriente
 summarized_data_6 <- empresas %>%
   group_by(Tipo_de_empresa) %>% summarize(Mean_Endeudamiento_Activo = mean(Endeudamiento_activo, na.rm = TRUE)) %>% view("Tte2")
 
-ggplot(summarized_data_6, aes(x = Tipo_de_empresa  , y = Mean_Endeudamiento_Activo)) +
+fig6<-ggplot(summarized_data_6, aes(x = Tipo_de_empresa  , y = Mean_Endeudamiento_Activo)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Promedio de Índice de Endeudamiento activo por Tipo de Empresa",
        x = "Tipo de Empresa", y = "Endeudamiento Activo") +
@@ -204,7 +205,7 @@ ggplot(summarized_data_6, aes(x = Tipo_de_empresa  , y = Mean_Endeudamiento_Acti
 summarized_data_7 <- empresas %>%
   group_by(Tipo_de_empresa) %>% summarize(Mean_Endeudamiento_Patrimonial = mean(Endeudamiento_patrimonial, na.rm = TRUE)) %>% view("Tte3")
 
-ggplot(summarized_data_7, aes(x = Tipo_de_empresa  , y = Mean_Endeudamiento_Patrimonial)) +
+fig7<-gggplot(summarized_data_7, aes(x = Tipo_de_empresa  , y = Mean_Endeudamiento_Patrimonial)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Promedio de Índice de Endeudamiento patrimonial por Tipo de Empresa",
        x = "Tipo de Empresa", y = "Endeudamiento Patrimonial") +
@@ -216,7 +217,7 @@ ggplot(summarized_data_7, aes(x = Tipo_de_empresa  , y = Mean_Endeudamiento_Patr
 summarized_data_8 <- empresas %>%
   group_by(Tipo_de_empresa) %>% summarize(Mean_Endeudamiento_activo_fijo = mean(Endeudamiento_activo_fijo, na.rm = TRUE)) %>% view("Tte4")
 
-ggplot(summarized_data_8, aes(x = Tipo_de_empresa  , y = Mean_Endeudamiento_activo_fijo)) +
+fig8<-ggplot(summarized_data_8, aes(x = Tipo_de_empresa  , y = Mean_Endeudamiento_activo_fijo)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Promedio de Índice de Endeudamiento activo fijo por Tipo de Empresa",
        x = "Tipo de Empresa", y = "Endeudamiento Activo fijo") +
@@ -230,7 +231,7 @@ ggplot(summarized_data_8, aes(x = Tipo_de_empresa  , y = Mean_Endeudamiento_acti
 summarized_data_9 <- empresas %>%
   group_by(Tipo_de_empresa) %>% summarize(Mean_Apalancamiento = mean(Apalancamiento, na.rm = TRUE)) %>% view("Tte5")
 
-ggplot(summarized_data_9, aes(x = Tipo_de_empresa  , y = Mean_Apalancamiento)) +
+fig9<-ggplot(summarized_data_9, aes(x = Tipo_de_empresa  , y = Mean_Apalancamiento)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Promedio de Índice de Apalancamiento por Tipo de Empresa",
        x = "Tipo de Empresa", y = "Apalancamiento") +
