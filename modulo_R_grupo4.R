@@ -89,7 +89,7 @@ glimpse(table_Resumen_final)
 #3-------------------------------------------------------------------------------------------------------------------------------
 #Grafico de barras para indicador de liquidez
 
----------------------------------
+
 #Posicion 1
 # First, calculate the mean Liquidez_Corriente for each province
 mean_liquidez_by_status <- aggregate(Liquidez_Corriente ~ Status, data = empresas, FUN = mean) %>% view("mean_by_status")
@@ -122,7 +122,7 @@ ggplot(empresas, aes(x = Status, y = Liquidez_Corriente)) +
        x = "Status",
        y = "Liquidez") +
   facet_wrap(~Provincia)
---------------------------------------------------
+
 
 
 #Grafica 2
