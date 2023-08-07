@@ -115,7 +115,7 @@ glimpse(table_Resumen_final)
 summarized_data_0 <- empresas %>%
   group_by(Provincia, Status) %>% summarize(Mean_Liquidez_Corriente = mean(Liquidez_Corriente, na.rm = TRUE)) 
 
-fig1<-ggplot(summarized_data_0, aes(x = Provincia  , y = Mean_Liquidez_Corriente , fill = Status)) +
+fig0<-ggplot(summarized_data_0, aes(x = Provincia  , y = Mean_Liquidez_Corriente , fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Promedio de Índice de Liquidez Corriente por Provincia y Status",
        x = "Provincia", y = "Promedio por Liquidez Corriente") +
@@ -127,7 +127,7 @@ fig1<-ggplot(summarized_data_0, aes(x = Provincia  , y = Mean_Liquidez_Corriente
 summarized_data_1 <- empresas %>%
   group_by(Provincia, Status) %>% summarize(Mean_Endeudamiento_activo = mean(Endeudamiento_activo, na.rm = TRUE)) %>% view("t2")
 
-ggplot(summarized_data_1, aes(x = Provincia, y = Mean_Endeudamiento_activo, fill = Status)) +
+fig1<-ggplot(summarized_data_1, aes(x = Provincia, y = Mean_Endeudamiento_activo, fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") + 
   labs(title = "Promedio de Índice de Endeudamiento del activo por Provincia y Status",
        x = "Provincia", y = "Promedio de Endeudamiento de activo") +
@@ -136,14 +136,6 @@ ggplot(summarized_data_1, aes(x = Provincia, y = Mean_Endeudamiento_activo, fill
 
 #Grafica de Solvencia por Status y Provincia: Endeudamiento Patrimonial
 
-
-##GRAFICA POR ENDEUDAMIENTO DE ACTIVO SEGUN STATUS Y PROVINCIA EXCLUYENDO MANABI POR DISTORCIONAR LA GRAFICA
-
-ggplot(table_Resumen_final1 , aes(x = Provincia, y = Endeudamiento_activo, fill = Status)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Índice de Endeudamiento del activo por Status y Provincia",
-       x = "Provincia", y = "Endeudamiento del activo") +
-=======
 summarized_data_2 <- empresas %>%
   group_by(Provincia, Status) %>% summarize(Mean_Endeudamiento_patrimonial = mean(Endeudamiento_patrimonial, na.rm = TRUE)) %>% view("t3")
 
@@ -151,7 +143,7 @@ ggplot(summarized_data_2, aes(x = Provincia, y = Mean_Endeudamiento_patrimonial,
   geom_bar(stat = "identity", position = "dodge") + 
   labs(title = "Promedio de Índice de Endeudamiento patrimonial por Provincia y Status",
        x = "Provincia", y = "Promedio de Endeudamiento patromonial") +
->>>>>>> 1a96f0704bd8658df91e99bb2c2e92c4a3dc0749
+
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_fill_discrete(name = "Status") + facet_grid(~ Provincia, scales = "free_x", space = "free_x")
 
