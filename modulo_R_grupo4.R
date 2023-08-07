@@ -205,7 +205,7 @@ fig6<-ggplot(summarized_data_6, aes(x = Tipo_de_empresa  , y = Mean_Endeudamient
 summarized_data_7 <- empresas %>%
   group_by(Tipo_de_empresa) %>% summarize(Mean_Endeudamiento_Patrimonial = mean(Endeudamiento_patrimonial, na.rm = TRUE)) %>% view("Tte3")
 
-fig7<-gggplot(summarized_data_7, aes(x = Tipo_de_empresa  , y = Mean_Endeudamiento_Patrimonial)) +
+fig7<-ggplot(summarized_data_7, aes(x = Tipo_de_empresa  , y = Mean_Endeudamiento_Patrimonial)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Promedio de Índice de Endeudamiento patrimonial por Tipo de Empresa",
        x = "Tipo de Empresa", y = "Endeudamiento Patrimonial") +
