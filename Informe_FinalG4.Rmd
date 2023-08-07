@@ -127,6 +127,15 @@ $ `ACTIVIDADES DE SERVICIOS ADMINISTRATIVOS Y DE APOYO.`
 
 ```
 
+Para las gráficas solicitadas, usamos ggplot y realizamos algunos filtros para las variables de interes sobre el tibble empresas y obtuvimos lo siguiente:
+
+1. Liquidez y Solvencia por Status y Provincia 
+
+```{r pressure, echo=FALSE}
+plot(fig1)
+```
+
+
 **Parte 2 - Preguntas de Investigación**
 
 1.  ***¿El endeudamiento del activo fue mayor en empresas micro + pequeñas vs. grandes?***
