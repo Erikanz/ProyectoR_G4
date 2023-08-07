@@ -23,15 +23,15 @@ glimpse(ciiu_df2)
 #1-----------------------------------------------------------------------------------------
 #Se filtra y se toma valores positivos para luego proceder a calcular los indicadores de liquidez y solvencia y evitar divisiones entre cero
 balance_2014_filter<-balance_2014_df %>% mutate(v539=ifelse(v539>0, v539, NA), v599=ifelse(v599>0, v599, NA), v698=ifelse(v698>0, v698, NA), v498=ifelse(v498>0, v498, NA)) %>% 
-filter(!is.na(v539) & !is.na(v599) & !is.na(v698) & !is.na(v498)) %>%  view("balance_2014_filter")
+  filter(!is.na(v539) & !is.na(v599) & !is.na(v698) & !is.na(v498)) %>%  view("balance_2014_filter")
 
 
 #Se crea la base de datos con las variables solicitadas 
 empresas_df1<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion, Tipo_de_empresa=tipo,
-                    Pais= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
-                    Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6,
-                    Liquidez_Corriente= v345/v539, Endeudamiento_activo= v599/v499  ,
-                    Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_df1")
+                                                Pais= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
+                                                Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6,
+                                                Liquidez_Corriente= v345/v539, Endeudamiento_activo= v599/v499  ,
+                                                Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_df1")
 
 str(empresas_df1)
 
@@ -143,7 +143,7 @@ fig2<-ggplot(summarized_data_2, aes(x = Provincia, y = Mean_Endeudamiento_patrim
   geom_bar(stat = "identity", position = "dodge") + 
   labs(title = "Promedio de Índice de Endeudamiento patrimonial por Provincia y Status",
        x = "Provincia", y = "Promedio de Endeudamiento patromonial") +
-
+  
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_fill_discrete(name = "Status") + facet_grid(~ Provincia, scales = "free_x", space = "free_x")
 
@@ -243,15 +243,15 @@ fig9<-ggplot(summarized_data_9, aes(x = Tipo_de_empresa  , y = Mean_Apalancamien
 #Para responder preguntas
 #tratando de ingresar el tamaño de la compañia
 empresas2<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion, Tipo_de_empresa=tipo,
-                                                País= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
-                                                Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6, tipo_cia =tamanio,
-                                                N_Direc = trab_direc, N_adm =trab_admin, Liquidez_Corriente= v345/v539, Endeudamiento_activo= v599/v499  ,
-
-                                                Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_con_tamaño")
+                                             País= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
+                                             Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6, tipo_cia =tamanio,
+                                             N_Direc = trab_direc, N_adm =trab_admin, Liquidez_Corriente= v345/v539, Endeudamiento_activo= v599/v499  ,
+                                             
+                                             Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_con_tamaño")
 
 # análisis endeudamiento del activo entre pequeñas 
 comparacion_endeudamiento <- empresas2 %>%
-Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_con_tamano")
+  Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_con_tamano")
 
 # análisis endeudamiento del activo entre pequeñas 
 comparacion_endeudamiento <- table_Resumen_fin %>%
@@ -282,4 +282,3 @@ resultados_por_tipo <- comparativa_liquidez %>%
     Promedio_Endeudamiento_Activo = mean(Endeudamiento_activo, na.rm = TRUE),
     Promedio_Liquidez_Corriente = mean(Liquidez_Corriente, na.rm = TRUE)
   )
-
