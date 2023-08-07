@@ -28,7 +28,7 @@ filter(!is.na(v539) & !is.na(v599) & !is.na(v698) & !is.na(v498)) %>%  view("bal
 
 #Se crea la base de datos con las variables solicitadas 
 empresas_df1<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion, Tipo_de_empresa=tipo,
-                    País= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
+                    Pais= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
                     Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6,
                     Liquidez_Corriente= v345/v539, Endeudamiento_activo= v599/v499  ,
                     Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_df1")
@@ -47,6 +47,9 @@ empresas_final<-empresas_subac %>% inner_join(ciiu_df2, by = c("Actividad_econom
 # Convertir a tibble
 empresas<-tibble::as_tibble(empresas_final) %>% view("empresas")
 glimpse(empresas)
+
+tabla_resumen_pichincha <- tabla_resumen %>%
+  filter(Provincia == "Pichincha")
 
 
 #2--------------------------------------------------------------------------------------
@@ -123,15 +126,58 @@ ggplot(summarized_data_0, aes(x = Provincia  , y = Mean_Liquidez_Corriente , fil
 summarized_data_1 <- empresas %>%
   group_by(Provincia, Status) %>% summarize(Mean_Endeudamiento_activo = mean(Endeudamiento_activo, na.rm = TRUE)) %>% view("t2")
 
+<<<<<<< HEAD
+
+#Opcion 1
+
+empresas_unique_provincias <- distinct(empresas_top_provinces, Provincia, Status, .keep_all = TRUE)
+
+ggplot(empresas_unique_provincias, aes(x=Liquidez_Corriente, y=Provincia)) + 
+  geom_bar(stat = "identity", position = "dodge") + labs(title="Comparativo de Indicador de Liquidez Corriente", x="Pron", y="Liquidez" )+
+  facet_wrap(~Status)
+
+ggplot(empresas_unique_provincias, aes(x = Liquidez_Corriente, y = Provincia)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Comparativo de Indicador de Liquidez Corriente",
+       x = "Pron", y = "Liquidez") +
+  facet_grid(Status ~ ., scales = "free_y", space = "free_y") +
+  theme(axis.text.y = element_text(hjust = 0)) +
+  coord_flip()
+
+
+#Opcion 2
+empresas_unique_provincias <- distinct(empresas, Provincia, Status, .keep_all = TRUE)
+
+ggplot(empresas_unique_provincias, aes(x=Status, y=Liquidez_Corriente)) + 
+  geom_bar(stat = "identity", position = "dodge") + labs(title="Comparativo de Indicador de Liquidez Corriente", x="Pron", y="Liquidez" )+
+  facet_wrap(~Provincia)
+
+
+##GRAFICA POR LIQUIDEZ CORRIENTE SEGUN STATUS Y PROVINCIA EXCLUYENDO MANABI POR DISTORCIONAR LA GRAFICA
+
+ggplot(table_Resumen_final1, aes(x = Provincia, y = Liquidez_Corriente, fill = Status)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Índice de Liquidez Corriente por Status y Provincia",
+       x = "Provincia", y = "Liquidez Corriente") +
+=======
 ggplot(summarized_data_1, aes(x = Provincia, y = Mean_Endeudamiento_activo, fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") + 
   labs(title = "Promedio de Índice de Endeudamiento del activo por Provincia y Status",
        x = "Provincia", y = "Promedio de Endeudamiento de activo") +
+>>>>>>> 1a96f0704bd8658df91e99bb2c2e92c4a3dc0749
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_fill_discrete(name = "Status") + facet_grid(~ Provincia, scales = "free_x", space = "free_x")
 
 #Grafica de Solvencia por Status y Provincia: Endeudamiento Patrimonial
 
+<<<<<<< HEAD
+##GRAFICA POR ENDEUDAMIENTO DE ACTIVO SEGUN STATUS Y PROVINCIA EXCLUYENDO MANABI POR DISTORCIONAR LA GRAFICA
+
+ggplot(table_Resumen_final1 , aes(x = Provincia, y = Endeudamiento_activo, fill = Status)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Índice de Endeudamiento del activo por Status y Provincia",
+       x = "Provincia", y = "Endeudamiento del activo") +
+=======
 summarized_data_2 <- empresas %>%
   group_by(Provincia, Status) %>% summarize(Mean_Endeudamiento_patrimonial = mean(Endeudamiento_patrimonial, na.rm = TRUE)) %>% view("t3")
 
@@ -139,6 +185,7 @@ ggplot(summarized_data_2, aes(x = Provincia, y = Mean_Endeudamiento_patrimonial,
   geom_bar(stat = "identity", position = "dodge") + 
   labs(title = "Promedio de Índice de Endeudamiento patrimonial por Provincia y Status",
        x = "Provincia", y = "Promedio de Endeudamiento patromonial") +
+>>>>>>> 1a96f0704bd8658df91e99bb2c2e92c4a3dc0749
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_fill_discrete(name = "Status") + facet_grid(~ Provincia, scales = "free_x", space = "free_x")
 
@@ -240,26 +287,42 @@ empresas2<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situa
                                                 País= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad, 
                                                 Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6, tipo_cia =tamanio,
                                                 N_Direc = trab_direc, N_adm =trab_admin, Liquidez_Corriente= v345/v539, Endeudamiento_activo= v599/v499  ,
+<<<<<<< HEAD
+                                                Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_con_tamaño")
+
+# análisis endeudamiento del activo entre pequeñas 
+comparacion_endeudamiento <- empresas2 %>%
+=======
                                                 Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_con_tamano")
 
 # análisis endeudamiento del activo entre pequeñas 
 comparacion_endeudamiento <- table_Resumen_fin %>%
+>>>>>>> 1a96f0704bd8658df91e99bb2c2e92c4a3dc0749
   mutate(
     Categoria_Empresa = ifelse(tipo_cia %in% c("MICRO", "PEQUEÑA"), "MICRO + PEQUEÑA", "GRANDE")
   ) %>%
-  group_by(Categoria_Empresa) %>%
+  group_by(tipo_cia) %>%
   summarise(Promedio_Endeudamiento_Activo = mean(Endeudamiento_activo))
 
 
 
 #realizando comparativa de liquidez
-comparativa_liquidez <- table_Resumen_final %>% 
+
+comparativa_liquidez <- empresas2 %>% 
+  group_by(Tipo_de_empresa) %>% 
   mutate(
     Cumple_Condiciones = case_when(
       is.na(N_Direc) | is.na(N_adm) ~ NA_character_,
       N_Direc > 60 & N_adm >= 100 & N_adm <= 800 ~ "Cumple",
       TRUE ~ "No Cumple"
-    )
-  )
+    )   
+  ) %>% view ("liquidez_final")
 
+
+resultados_por_tipo <- comparativa_liquidez %>%
+  group_by(Tipo_de_empresa, Cumple_Condiciones) %>%
+  summarize(
+    Promedio_Endeudamiento_Activo = mean(Endeudamiento_activo, na.rm = TRUE),
+    Promedio_Liquidez_Corriente = mean(Liquidez_Corriente, na.rm = TRUE)
+  )
 
