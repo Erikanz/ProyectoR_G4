@@ -107,8 +107,7 @@ glimpse(table_Resumen_final)
 
 
 ##GRAFICA POR LIQUIDEZ CORRIENTE SEGUN STATUS Y PROVINCIA EXCLUYENDO MANABI POR DISTORCIONAR LA GRAFICA
-table_Resumen_final_sin_manabi <- table_Resumen_final %>%
-  filter(Provincia != "MANABI")
+
 ggplot(table_Resumen_final1, aes(x = Provincia, y = Liquidez_Corriente, fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Índice de Liquidez Corriente por Status y Provincia",
