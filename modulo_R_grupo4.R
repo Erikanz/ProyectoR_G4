@@ -1,11 +1,16 @@
 #Proyecto Final--R
-##Integrantes: Johanna Vinueza, Erika Neira, Ninibeth Bancho
+##Integrantes: Johanna Vinueza, Erika Neira
 ##Grupo 4 - Parte 4
 
 #Paquetes y librerias----
 
 paquetes<-c("openxlsx", "magrittr", "tidyverse", "readr", "dplyr", "readxl")
 lapply(paquetes, library, character.only=TRUE)
+
+install.packages("knitr")
+library(knitr)
+install.packages("tinytex")
+tinytex::install_tinytex()
 
 #Exportar datos----
 
@@ -142,15 +147,13 @@ ggplot(table_Resumen_final1 , aes(x = Provincia, y = Endeudamiento_activo, fill 
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Índice de Endeudamiento del activo por Status y Provincia",
        x = "Provincia", y = "Endeudamiento del activo") +
-=======
-summarized_data_2 <- empresas %>%
+  summarized_data_2 <- empresas %>%
   group_by(Provincia, Status) %>% summarize(Mean_Endeudamiento_patrimonial = mean(Endeudamiento_patrimonial, na.rm = TRUE)) %>% view("t3")
 
 ggplot(summarized_data_2, aes(x = Provincia, y = Mean_Endeudamiento_patrimonial, fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") + 
   labs(title = "Promedio de Índice de Endeudamiento patrimonial por Provincia y Status",
        x = "Provincia", y = "Promedio de Endeudamiento patromonial") +
->>>>>>> 1a96f0704bd8658df91e99bb2c2e92c4a3dc0749
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_fill_discrete(name = "Status") + facet_grid(~ Provincia, scales = "free_x", space = "free_x")
 
@@ -182,7 +185,7 @@ ggplot(summarized_data_4, aes(x = Provincia, y = Mean_Apalancamiento, fill = Sta
 #Gráficos correspondientes al indicador Liquidez y Solvencia por Tipo de Empresa
 
 
-#Grafico de Liquidez Corriente por tipo de empresa
+#Gráfico de Liquidez Corriente por tipo de empresa
 
 summarized_data_5 <- empresas %>%
   group_by(Tipo_de_empresa) %>% summarize(Mean_Liquidez_Corriente = mean(Liquidez_Corriente, na.rm = TRUE)) %>% view("Tte1")
@@ -194,7 +197,7 @@ ggplot(summarized_data_5, aes(x = Tipo_de_empresa  , y = Mean_Liquidez_Corriente
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
-#Grafica de Solvencia por Tipo de Empresa: Endeudamiento Activo
+#Gráfica de Solvencia por Tipo de Empresa: Endeudamiento Activo
 
 summarized_data_6 <- empresas %>%
   group_by(Tipo_de_empresa) %>% summarize(Mean_Endeudamiento_Activo = mean(Endeudamiento_activo, na.rm = TRUE)) %>% view("Tte2")
@@ -286,5 +289,5 @@ resultados_por_tipo <- comparativa_liquidez %>%
   summarize(
     Promedio_Endeudamiento_Activo = mean(Endeudamiento_activo, na.rm = TRUE),
     Promedio_Liquidez_Corriente = mean(Liquidez_Corriente, na.rm = TRUE)
-  )
+  ) %>%  view("resultados liquidez por tipo")
 
