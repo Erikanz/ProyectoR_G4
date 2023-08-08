@@ -59,7 +59,10 @@ Para brindar una visión más completa, la base de datos contiene datos geográf
 ```{r}
 paquetes <- c("openxlsx", "magrittr", "tidyverse", "readr", "dplyr", "readxl")
 lapply(paquetes, library, character.only = TRUE)
+<<<<<<< HEAD
 tinytex::install_tinytex(force = TRUE)
+=======
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 balance_2014_df<-read.xlsx("Data/balances_2014.xlsx")
 ciiu_table<-read.xlsx("Data/ciiu.xlsx")%>% view("ciuu")
@@ -78,6 +81,18 @@ filter(!is.na(v539) & !is.na(v599) & !is.na(v698) & !is.na(v498)) %>%
 ```
 
 Una vez con realizados estos cambios, se procedió con la construcción del objeto denominado empresas como tibble. Para esta tarea fue esencial las funciones como mutate y transmutate. Como puede apreciar se iban añadiendo las variables solicitadas
+<<<<<<< HEAD
+=======
+
+```{r}
+empresas_df1<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion, Tipo_de_empresa=tipo,País= pais, Provincia=provincia, Canton=canton, Ciudad= ciudad,  Actividad_economica= ciiu4_nivel1, Subactividad=ciiu4_nivel6, Liquidez_Corriente= v345/v539, Endeudamiento_activo= v599/v499  ,Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 , Apalancamiento= v499/v698) %>% view("empresas_df1")
+```
+
+Sin embargo, las variables denominadas Actividad_economica y subactividad necesitaban estar explicitamente con una descripción en base a su codificación por lo que usando inner_join y mutate podimos realizar aquella solicitud. El código se muestra a continuación
+
+```{r}
+empresas_subac<-empresas_df1 %>% inner_join(ciiu_df2, by = c("Subactividad"="CODIGO"))%>% mutate(Subactividad=DESCRIPCION) %>% select(-c(DESCRIPCION, NIVEL)) %>% view("change_Subac")
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 ```{r}
 empresas_df1<-balance_2014_filter %>% transmute(Empresas= nombre_cia, Status= situacion,
@@ -88,6 +103,7 @@ Endeudamiento_patrimonial= v599/v698, Endeudamiento_activo_fijo= v698/v498 ,
 Apalancamiento= v499/v698) %>% view("empresas_df1")
 ```
 
+<<<<<<< HEAD
 Sin embargo, las variables denominadas Actividad_económica y subactividad necesitaban estar explicitamente con una descripción en base a su codificación por lo que usando inner_join y mutate podimos realizar aquella solicitud. El código se muestra a continuación
 
 ```{r}
@@ -101,6 +117,8 @@ mutate(Actividad_economica=DESCRIPCION) %>%
 select(-c(DESCRIPCION, NIVEL)) %>% view("final_table")
 ```
 
+=======
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 Finalmente, nos toca convertir al objeto empresas_final el cual contiene todas las variables solicitadas en un tibble.
 
 ```{r}
@@ -111,18 +129,31 @@ glimpse(empresas)
 
 Para la realización de la tabla con la información resumida. Usamos el comando pivot_wider para convertir una columna en fila y poder ir adecuandola. Es así que diseñamos una tabla que contiene como columnas a la actividad económica y como filas los cantones. La variable de interes es el conteo o numero de empresas de actividad economica por canton y al final de la tabla hemos añadido una fila que contiene la suma de cada actividad económica la cual corresponde al total de empresas por actividad economica. El siguiente codigo muetra la tabla
 
+<<<<<<< HEAD
 Para las gráficas solicitadas, usamos ggplot y realizamos algunos filtros para las variables de interes sobre el tibble empresas y obtuvimos lo siguiente:
 
 1.  Liquidez y Solvencia por Status y Provincia
 
 1.1 Liquidez Corriente
 
+=======
+
+Para las gráficas solicitadas, usamos ggplot y realizamos algunos filtros para las variables de interes sobre el tibble empresas y obtuvimos lo siguiente:
+
+1. Liquidez y Solvencia por Status y Provincia 
+
+1.1 Liquidez Corriente
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 ```{r}
 #Grafica de Liquidez Corriente por Status y Provincia
 
 summarized_data_0 <- empresas %>%
+<<<<<<< HEAD
   group_by(Provincia, Status) %>% 
   summarize(Mean_Liquidez_Corriente = mean(Liquidez_Corriente, na.rm = TRUE)) 
+=======
+  group_by(Provincia, Status) %>% summarize(Mean_Liquidez_Corriente = mean(Liquidez_Corriente, na.rm = TRUE)) 
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 fig0<-ggplot(summarized_data_0, aes(x = Provincia  , y = Mean_Liquidez_Corriente , fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") +
@@ -134,24 +165,36 @@ fig0<-ggplot(summarized_data_0, aes(x = Provincia  , y = Mean_Liquidez_Corriente
 #Grafica de Solvencia por Status y Provincia: Endeudamiento Activo
 
 summarized_data_1 <- empresas %>%
+<<<<<<< HEAD
   group_by(Provincia, Status) %>% 
   summarize(Mean_Endeudamiento_activo = mean(Endeudamiento_activo, na.rm = TRUE)) %>% 
   view("t2")
+=======
+  group_by(Provincia, Status) %>% summarize(Mean_Endeudamiento_activo = mean(Endeudamiento_activo, na.rm = TRUE)) %>% view("t2")
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 fig1<-ggplot(summarized_data_1, aes(x = Provincia, y = Mean_Endeudamiento_activo, fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") + 
   labs(title = "Promedio de Índice de Endeudamiento del activo por Provincia y Status",
        x = "Provincia", y = "Promedio de Endeudamiento de activo") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+<<<<<<< HEAD
   scale_fill_discrete(name = "Status") + 
   facet_grid(~ Provincia, scales = "free_x", space = "free_x")
+=======
+  scale_fill_discrete(name = "Status") + facet_grid(~ Provincia, scales = "free_x", space = "free_x")
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 #Grafica de Solvencia por Status y Provincia: Endeudamiento Patrimonial
 
 summarized_data_2 <- empresas %>%
+<<<<<<< HEAD
   group_by(Provincia, Status) %>% 
   summarize(Mean_Endeudamiento_patrimonial = mean(Endeudamiento_patrimonial, na.rm = TRUE)) %>% 
   view("t3")
+=======
+  group_by(Provincia, Status) %>% summarize(Mean_Endeudamiento_patrimonial = mean(Endeudamiento_patrimonial, na.rm = TRUE)) %>% view("t3")
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 fig2<-ggplot(summarized_data_2, aes(x = Provincia, y = Mean_Endeudamiento_patrimonial, fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") + 
@@ -159,37 +202,57 @@ fig2<-ggplot(summarized_data_2, aes(x = Provincia, y = Mean_Endeudamiento_patrim
        x = "Provincia", y = "Promedio de Endeudamiento patromonial") +
 
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+<<<<<<< HEAD
   scale_fill_discrete(name = "Status") + 
   facet_grid(~ Provincia, scales = "free_x", space = "free_x")
+=======
+  scale_fill_discrete(name = "Status") + facet_grid(~ Provincia, scales = "free_x", space = "free_x")
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 
 #Grafica de Solvencia por Status y Provincia:Endeudamiento_Activo_Fijo
 summarized_data_3 <- empresas %>%
+<<<<<<< HEAD
   group_by(Provincia, Status) %>% 
   summarize(Mean_Endeudamiento_activo_fijo = mean(Endeudamiento_activo_fijo, na.rm = TRUE)) %>% 
   view("t4")
+=======
+  group_by(Provincia, Status) %>% summarize(Mean_Endeudamiento_activo_fijo = mean(Endeudamiento_activo_fijo, na.rm = TRUE)) %>% view("t4")
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 fig3<-ggplot(summarized_data_3, aes(x = Provincia, y = Mean_Endeudamiento_activo_fijo, fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") + 
   labs(title = "Promedio de Índice de Endeudamiento activo fijo por Provincia y Status",
        x = "Provincia", y = "Promedio de Endeudamiento activo fijo") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+<<<<<<< HEAD
   scale_fill_discrete(name = "Status") + 
   facet_grid(~ Provincia, scales = "free_x", space = "free_x")
+=======
+  scale_fill_discrete(name = "Status") + facet_grid(~ Provincia, scales = "free_x", space = "free_x")
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 #Grafica de Solvencia por Status y Provincia:Apalancamiento
 
 summarized_data_4 <- empresas %>%
+<<<<<<< HEAD
   group_by(Provincia, Status) %>% 
   summarize(Mean_Apalancamiento = mean(Apalancamiento, na.rm = TRUE)) %>% view("t5")
+=======
+  group_by(Provincia, Status) %>% summarize(Mean_Apalancamiento = mean(Apalancamiento, na.rm = TRUE)) %>% view("t5")
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 fig4<-ggplot(summarized_data_4, aes(x = Provincia, y = Mean_Apalancamiento, fill = Status)) +
   geom_bar(stat = "identity", position = "dodge") + 
   labs(title = "Promedio de Índice de Apalancamiento por Provincia y Status",
        x = "Provincia", y = "Promedio de Apalancamiento") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+<<<<<<< HEAD
   scale_fill_discrete(name = "Status") + 
   facet_grid(~ Provincia, scales = "free_x", space = "free_x")
+=======
+  scale_fill_discrete(name = "Status") + facet_grid(~ Provincia, scales = "free_x", space = "free_x")
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 
 #Gráficos correspondientes al indicador Liquidez y Solvencia por Tipo de Empresa
@@ -199,9 +262,13 @@ fig4<-ggplot(summarized_data_4, aes(x = Provincia, y = Mean_Apalancamiento, fill
 #Grafico de Liquidez Corriente por tipo de empresa
 
 summarized_data_5 <- empresas %>%
+<<<<<<< HEAD
   group_by(Tipo_de_empresa) %>% 
   summarize(Mean_Liquidez_Corriente = mean(Liquidez_Corriente, na.rm = TRUE)) %>% 
   view("Tte1")
+=======
+  group_by(Tipo_de_empresa) %>% summarize(Mean_Liquidez_Corriente = mean(Liquidez_Corriente, na.rm = TRUE)) %>% view("Tte1")
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 fig5<-ggplot(summarized_data_5, aes(x = Tipo_de_empresa  , y = Mean_Liquidez_Corriente)) +
   geom_bar(stat = "identity", position = "dodge") +
@@ -213,9 +280,13 @@ fig5<-ggplot(summarized_data_5, aes(x = Tipo_de_empresa  , y = Mean_Liquidez_Cor
 #Grafica de Solvencia por Tipo de Empresa: Endeudamiento Activo
 
 summarized_data_6 <- empresas %>%
+<<<<<<< HEAD
   group_by(Tipo_de_empresa) %>% 
   summarize(Mean_Endeudamiento_Activo = mean(Endeudamiento_activo, na.rm = TRUE)) %>% 
   view("Tte2")
+=======
+  group_by(Tipo_de_empresa) %>% summarize(Mean_Endeudamiento_Activo = mean(Endeudamiento_activo, na.rm = TRUE)) %>% view("Tte2")
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 fig6<-ggplot(summarized_data_6, aes(x = Tipo_de_empresa  , y = Mean_Endeudamiento_Activo)) +
   geom_bar(stat = "identity", position = "dodge") +
@@ -227,9 +298,13 @@ fig6<-ggplot(summarized_data_6, aes(x = Tipo_de_empresa  , y = Mean_Endeudamient
 #Grafica de Solvencia por Tipo de Empresa: Endeudamiento Patrimonial
 
 summarized_data_7 <- empresas %>%
+<<<<<<< HEAD
   group_by(Tipo_de_empresa) %>% 
   summarize(Mean_Endeudamiento_Patrimonial = mean(Endeudamiento_patrimonial, na.rm = TRUE)) %>% 
   view("Tte3")
+=======
+  group_by(Tipo_de_empresa) %>% summarize(Mean_Endeudamiento_Patrimonial = mean(Endeudamiento_patrimonial, na.rm = TRUE)) %>% view("Tte3")
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 fig7<-ggplot(summarized_data_7, aes(x = Tipo_de_empresa  , y = Mean_Endeudamiento_Patrimonial)) +
   geom_bar(stat = "identity", position = "dodge") +
@@ -241,9 +316,13 @@ fig7<-ggplot(summarized_data_7, aes(x = Tipo_de_empresa  , y = Mean_Endeudamient
 #Grafica de Solvencia por Tipo de Empresa: Endeudamiento_Activo_Fijo
 
 summarized_data_8 <- empresas %>%
+<<<<<<< HEAD
   group_by(Tipo_de_empresa) %>% 
   summarize(Mean_Endeudamiento_activo_fijo = mean(Endeudamiento_activo_fijo, na.rm = TRUE)) %>% 
   view("Tte4")
+=======
+  group_by(Tipo_de_empresa) %>% summarize(Mean_Endeudamiento_activo_fijo = mean(Endeudamiento_activo_fijo, na.rm = TRUE)) %>% view("Tte4")
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 fig8<-ggplot(summarized_data_8, aes(x = Tipo_de_empresa  , y = Mean_Endeudamiento_activo_fijo)) +
   geom_bar(stat = "identity", position = "dodge") +
@@ -257,9 +336,13 @@ fig8<-ggplot(summarized_data_8, aes(x = Tipo_de_empresa  , y = Mean_Endeudamient
 
 
 summarized_data_9 <- empresas %>%
+<<<<<<< HEAD
   group_by(Tipo_de_empresa) %>% 
   summarize(Mean_Apalancamiento = mean(Apalancamiento, na.rm = TRUE)) %>% 
   view("Tte5")
+=======
+  group_by(Tipo_de_empresa) %>% summarize(Mean_Apalancamiento = mean(Apalancamiento, na.rm = TRUE)) %>% view("Tte5")
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 fig9<-ggplot(summarized_data_9, aes(x = Tipo_de_empresa  , y = Mean_Apalancamiento)) +
   geom_bar(stat = "identity", position = "dodge") +
@@ -276,29 +359,45 @@ plot(fig0)
 ```
 
 1.2 Endeudamiento Activo
+<<<<<<< HEAD
 
+=======
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 ```{r}
 plot(fig1)
 ```
 
+<<<<<<< HEAD
 1.2 Endeudamiento Patrinomial
 
+=======
+1.2 Endeudamiento Patrinomial 
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 ```{r}
 plot(fig2)
 ```
 
 1.3 Endeudamiento activo fijo
+<<<<<<< HEAD
 
+=======
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 ```{r}
 plot(fig3)
 ```
 
+<<<<<<< HEAD
 1.4 Apalancamiento
 
+=======
+
+1.4 Apalancamiento
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 ```{r}
 plot(fig4)
 ```
 
+<<<<<<< HEAD
 2.  Liquidez y Solvencia por Tipo de Empresa 2.1 Liquidez Corriente
 
 ```{r }
@@ -325,6 +424,28 @@ plot(fig8)
 
 2.5 Apalancamiento
 
+=======
+2. Liquidez y Solvencia por Tipo de Empresa
+ 2.1 Liquidez Corriente
+ 
+```{r }
+plot(fig5)
+```
+ 
+ 2.2 Endeudamiento Activo
+```{r }
+plot(fig6)
+``` 
+ 2.3 Endeudamiento Patrinomial
+```{r}
+plot(fig7)
+``` 
+ 2.4 Endeudamiento activo fijo
+```{r}
+plot(fig8)
+``` 
+ 2.5 Apalancamiento
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 ```{r }
 plot(fig9)
 ```
@@ -333,13 +454,33 @@ plot(fig9)
 
 1.  ***¿El endeudamiento del activo fue mayor en empresas micro + pequeñas vs. grandes?***
 
+<<<<<<< HEAD
     El promedio del endeudamiento del activo de las micro + pequeñas empresas en el Ecuador es significativamente menor que el de las grandes empresas. Mientras que las micro + pequeñas empresas tienen un promedio de endeudamiento del activo del 0.57 las grandes empresas registran un indice de 0.64. Esta información resalta una diferencia importante en cómo estas dos categorías de empresas financian sus operaciones a través de deudas en relación con sus activos.
+=======
+
+    El promedio del endeudamiento del activo de las micro + pequeñas empresas en el Ecuador es significativamente menor que el de las grandes empresas. Mientras que las micro + pequeñas empresas tienen un promedio de endeudamiento del activo del 0.57 las grandes empresas registran un indice de 0.64. Este menor índice en las micro + pequeñas empresas representa un elevado grado de independencia frente a sus acreedores, lo que indica una estructura financiera más segura y menos riesgosa en comparación con las grandes empresas.
+
+    El promedio del endeudamiento del activo de las micro + pequeñas empresas en el Ecuador es significativamente mayor que el de las grandes empresas. Mientras que las micro + pequeñas empresas tienen un promedio de endeudamiento del activo del 359.25, las grandes empresas registran un bajo índice de 18.73. Este bajo índice en las grandes empresas representa un elevado grado de independencia frente a sus acreedores, lo que indica una estructura financiera más segura y menos riesgosa en comparación con las micro + pequeñas empresas.
+
+2.  ***¿La liquidez por tipo de compañía es diferente entre aquellas empresas que tienen más de 60 trabajadores directos y que cuenta con 100 a 800 trabajadores administrativos?***
+    La liquidez de las empresas que tienen mas de 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos
+=======
+    El promedio del endeudamiento del activo de las micro + pequeñas empresas en el Ecuador es significativamente mayor que el de las grandes empresas. Mientras que las micro + pequeñas empresas tienen un promedio de endeudamiento del activo del 359,25, las grandes empresas registran un bajo índice de 18,73. Este bajo índice en las grandes empresas representa un elevado grado de independencia frente a sus acreedores, lo que indica una estructura financiera más segura y menos riesgosa en comparación con las micro + pequeñas empresas.
+>>>>>>> 1a96f0704bd8658df91e99bb2c2e92c4a3dc0749
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 2.  ***¿La liquidez por tipo de compañía es diferente entre aquellas empresas que tienen más de 60 trabajadores directos y que cuenta con 100 a 800 trabajadores administrativos?***
 
     El promedio de liquidez de las empresas anónimas que tienen mas de 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos es de 1,95 a diferencia de las otras empresas anónimas con menos trabajadores que tienen un indice promedio de liquidez de 16,40 y aunque este índice muestra una mayor capacidad de este ultimo grupo de emopresas para hacer frente a sus vencimientos de corto plazo, un exceso de liquidez puede significar que la empresa no está invirtiendo eficientemente sus recursos, lo que podría afectar su rentabilidad a largo plazo.
 
+<<<<<<< HEAD
 Por otro lado, el promedio de liquidez de las empresas de Sucursal extranjera, que tienen más de 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos, es de 2,60. En contraste con las empresas de sucursal extranjera con menos personal que tienen un índice de 5,37. Este coeficiente de liquidez más alto sugiere que estas últimas empresas extranjeras tendrán mayores posibilidades de efectuar sus pagos de corto plazo de manera oportuna y solvente.
+=======
+
+Por otro lado, el promedio de liquidez de las empresas de Sucursal extranjera, que tienen más de 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos, es de 2,60. En contraste con las empresas de sucursal extranjera con menos personal que tienen un índice de 5,37. Este coeficiente de liquidez más alto sugiere que estas últimas empresas extranjeras tendrán mayores posibilidades de efectuar sus pagos de corto plazo de manera oportuna y solvente.
+
+   Por otro lado, el promedio de liquidez de las empresas de Sucursal extranjera, que tienen más de 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos, es de 2,60. En contraste con  las empresas de sucursal extranjera con menos personal que  tienen un índice de 5,37. Este coeficiente de liquidez más alto sugiere que estas últimas empresas extranjeras tendrán mayores posibilidades de efectuar sus pagos de corto plazo de manera oportuna y solvente.
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
 
 3.  ***Descripción del top 10 de empresas con mayor apalancamiento***
 
@@ -399,3 +540,8 @@ Despues de contestar las tres preguntas iniciales y visualizando las correspondi
 -   Las sucursales extranjeras con más personal directivo y administrativo tienden a tener un coeficiente de liquidez más alto en comparación con las que tienen menos personal. Esto sugiere una mejor capacidad para cumplir con los compromisos financieros a corto plazo.
 
 En resumen, las empresas en Ecuador, especialmente las micro + pequeñas, pueden depender más del endeudamiento. Las empresas más grandes pueden tener una flexibilidad financiera superior y mantener niveles más altos de liquidez. Las sucursales extranjeras con más personal parecen estar mejor preparadas para enfrentar sus obligaciones financieras a corto plazo. Estas conclusiones se basan en análisis de datos y podrían variar según factores específicos de la industria y el contexto económico.
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> dbf05e77af2875d372d7996b8e85236bc18b760d
