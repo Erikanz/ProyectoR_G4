@@ -1,0 +1,515 @@
+---
+title: "Proyecto_G4_actualizado"
+author: "Erika Neira / Johanna Vinueza"
+date: "2023-08-17"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{=html}
+<style>
+  body {
+    text-align: justify;
+  }
+</style>
+```
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Proyecto final del módulo - Introducción a programación en R
+
+### Introducción
+
+La liquidez y la solvencia son indicadores críticos que brindan una visión clave sobre la capacidad financiera de una organización. Tanto para empresas, inversionistas y analistas, estos indicadores son fundamentales para comprender cómo una empresa puede afrontar sus obligaciones financieras y mantener una operación sostenible a lo largo del tiempo.
+
+La liquidez se enfoca en medir la capacidad de la empresa para convertir sus activos en efectivo y cumplir con sus pasivos a corto plazo. Por otro lado, la solvencia se refiere a la capacidad de la empresa para hacer frente a sus deudas a largo plazo.
+
+Al analizar estos indicadores, obtenemos una visión integral sobre la habilidad de la compañía para cumplir con sus obligaciones tanto en el corto como en el largo plazo, y también para mantener su operatividad a lo largo del tiempo.
+
+Para realizar este análisis, utilizaremos el lenguaje de programación R, lo que nos permitirá estudiar diferentes variables financieras, tamaño, número de empleados, provincia, cantón, ciudad, actividad económica, entre otras, de un grupo de empresas. De esta manera, obtendremos una visión holística de la situación financiera de estas compañías y comprenderemos mejor su posición en el mercado.
+
+Mediante este proyecto, podremos tomar decisiones informadas sobre las empresas analizadas y evaluar su desempeño financiero con una perspectiva más amplia. La combinación de estos indicadores con el análisis detallado de diversas variables nos brindará una visión más completa y precisa sobre la salud financiera de las empresas en cuestión.
+
+### Instalacion de paquetes
+
+La carga de la librería es esencial para el análisis de datos, ya que simplifica la manipulación y exploración de la información. A continuación, se presentan los paquetes que se van a cargar:
+
+```{r}
+library(conflicted)
+library(openxlsx)
+library(magrittr)
+library(tibble)
+library(ggplot2)
+library(tinytex)
+library(dplyr)
+library(knitr)
+library(tidyr)
+library(gridExtra)
+```
+
+------------------------------------------------------------------------
+
+### Objetivo General
+
+Nuestro objetivo es promover el conocimiento y la comprensión en el ámbito financiero, proporcionando información relevante a inversionistas, directivos y a todas aquellas personas interesadas en conocer la situación financiera de las empresas ecuatorianas. Además, este proyecto tiene como propósito fomentar el desarrollo de habilidades analíticas y de programación en R entre las becarias, para que puedan destacarse en el competitivo mundo financiero y empresarial.
+
+### Objetivos especificos
+
+1.  Analizar el grado de endeudamiento de microempresas, pequeñas empresas y grandes empresas.
+
+2.  Realizar una comparación de la liquidez empresarial considerando la cantidad de empleados.
+
+3.  Elaborar un perfil detallado de las diez empresas con mayor nivel de apalancamiento.
+
+### Descripción de los datos
+
+La base de datos que analizaremos contiene datos públicos proporcionados por la Autoridad competente en Ecuador, la Superintendencia de Compañías. Estos datos son de carácter público y accesibles para todos, lo que permite un análisis transparente y objetivo de la información financiera de las empresas registradas en el país.
+
+El uso de datos proporcionados por la Superintendencia de Compañías garantiza la confiabilidad y la precisión de la información, ya que es recopilada y verificada por una entidad oficial y reguladora. Esto asegura que los resultados obtenidos a partir del análisis de esta base de datos sean sólidos y confiables.
+
+Esta base de datos, contiene información clave sobre cuentas contables y variables, facilitando el análisis financiero. Cada empresa está identificada por un registro único de contribuyentes, lo que proporciona una visión rápida de su estado operativo. Además, se detalla el tipo de compañía, permitiendo su clasificación según su naturaleza jurídica y actividad comercial. También se incluye la fecha de constitución, lo que ayuda a rastrear su tiempo de existencia.
+
+La base de datos denominada "balance_2014.xlsx" esta compuesta por un total de 47,033 observaciones y 347 variables. Esta base contiene datos geográficos altamente precisos que incluyen la ubicación detallada de las sedes principales en términos de provincia, cantón y ciudad. Además, ha sido enriquecida con una categorización de los niveles de las empresas, ofreciendo información sobre su envergadura y alcance.
+
+A modo de complemento, se cuenta tambien con dos tablas adicionales: "ciiu.xlsx" y "cias_codebook.xlsx". Estas dos tablas proporcionan una clasificación jerárquica de las empresas y el compendio de las definiciones de las variables presentes en la base de datos "balance_2014", respectivamente.
+
+------------------------------------------------------------------------
+
+### Análisis de la data
+
+Inicialmente procedemos a exportas los datos de las tablas balance_2014 y ciiu.xlsx
+
+```{r}
+#Exportar datos----
+
+balance_2014_df<-read.xlsx("Data/balances_2014.xlsx")%>% view("balance_2014")
+ciiu_table<-read.xlsx("Data/ciiu.xlsx")%>% view("ciuu")
+
+
+#Transformamos a tibble
+balance_2014_df1<-tibble(balance_2014_df)
+ciiu_df2<-tibble::as_tibble(ciiu_table)
+```
+
+Luego, exploramos los datos de las dos tablas, tal como lo muestran siguientes imágenes.
+
+|                                                                                                         |
+|------------------------------------------------------------------------|
+| *Imagen No.1*                                                                                           |
+| ![Imagen No.1](C:/Users/erika/Documents/R/ProyectoR_G4/info/imagen1.png){width="500px," height="300px"} |
+| *Imagen No.2*                                                                                           |
+| ![Imagen No.2](C:/Users/erika/Documents/R/ProyectoR_G4/info/imagen2.png){width="500px," height="300px"} |
+
+Posterior a la exploración de los datos, se procedió a identificar y seleccionar las variables para el cálculo de los indicadores, las cuales la resumimos en la tabla 1.
+
+***Tabla 1. Variables Seleccionadas***
+
+| Variable | Descripción                 |
+|----------|-----------------------------|
+| v345     | Total Activos Corrientes    |
+| v539     | Total Pasivos Corrientes    |
+| v498     | Total Activos No Corrientes |
+| v569     | Total Pasivos No Corrientes |
+| v698     | Patrimonio Neto             |
+
+Proseguimos a crear la tabla que contendrá todas las variables que debemos analizar en el presente informe, asi como también realizar la unión con la tabla ciiu_df2, para agregar la descripción de la actividad económica y la subactividad.
+
+```{r}
+empresas_df1<-balance_2014_df1 %>% transmute(Empresas= nombre_cia, Status= situacion,
+              Tipo_de_empresa=tipo,País= pais, Provincia=provincia, Canton=canton, 
+              Ciudad= ciudad,Actividad_economica= ciiu4_nivel1, 
+              Subactividad=ciiu4_nivel6,Liquidez_Corriente= v345/v539, 
+              Endeudamiento_activo= v599/v499,
+              Endeudamiento_patrimonial= v599/v698, 
+              Endeudamiento_activo_fijo= v698/v498,
+              Apalancamiento= v499/v698) %>% view("empresas_df1")
+```
+
+```{r}
+empresas_cambios<-empresas_df1 %>% 
+  left_join(ciiu_df2, by = c("Subactividad"="CODIGO"))%>% 
+  mutate(Subactividad=DESCRIPCION) %>% select(-c(DESCRIPCION, NIVEL)) %>% 
+  view("change_1")
+
+empresas_final<-empresas_cambios %>% 
+  left_join(ciiu_df2, by = c("Actividad_economica"="CODIGO")) %>% 
+  mutate(Actividad_economica=DESCRIPCION) %>% select(-c(DESCRIPCION, NIVEL)) %>% 
+  view("final_table")
+
+```
+
+Luego de tener ordenada la tabla y con una mayor descripción de las actividades económicas de las empresas, procedemos convertir a tibble a la tabla empresas_final y realizamos un head para mostrar las primeras filas del marco de datos "empresas". Proporcionado una vista rápida de los datos y cómo están organizados. posteriormente utilizamos el comando glimpse, el cual nos proporciona un resumen conciso de la estructura del marco de datos "empresas".
+
+```{r}
+# Convertir a tibble empresas_final
+empresas<-tibble::as_tibble(empresas_final)
+head(empresas)
+glimpse(empresas)
+```
+
+Con el propósito de examinar la distribución de empresas en todo el país, hemos desarrollado algunos scripts para generar una tabla que ilustre la cantidad de empresas por cantón y actividad económica en Ecuador. Este enfoque nos permite identificar las áreas con mayor concentración empresarial y ofrece una visión detallada de cómo están distribuidas las actividades económicas a lo largo del territorio nacional.
+
+```{r,, echo=TRUE, results=FALSE}
+#Tabla total de empresas por actividad economica
+tabla1_conteo_act.econo<-empresas %>% group_by(Actividad_economica) %>% 
+  count()%>%view("tabla_activ_economica")
+tabla1_actividad_econ<-data.frame(tabla1_conteo_act.econo)
+
+#Tabla total de actividad economica por canton
+tabla2_conteo_act.econo<-empresas %>% group_by(Actividad_economica, Canton) %>% 
+  count() %>% view("actividad_economica_por_canton")
+tabla2_conteo_act.econo<-data.frame(tabla2_conteo_act.econo)
+
+
+#con el numero total de empresas listadas todas en una misma columna
+tabla2a_conteo_act.econo <- tabla2_conteo_act.econo %>%
+  group_by(Actividad_economica) %>%
+  summarise(No_compañias = n())
+
+total_compañias <- tabla2a_conteo_act.econo %>%
+  summarise(No_compañias = sum(No_compañias)) %>%
+  mutate(Actividad_economica = "Total")
+
+tabla2a_conteo_act.econo <- bind_rows(tabla2a_conteo_act.econo, total_compañias)
+
+#Una sola tabla y Convertir de col a fila
+pivot_tablafinal_df<-tabla2_conteo_act.econo %>%
+  pivot_wider(names_from= Actividad_economica, values_from = n ) %>% 
+  view("table_1")
+
+
+#Reemplazando los NA por zero para obtener el total 
+pivot_tablafinal_df <- pivot_tablafinal_df %>%
+  mutate(across(everything(), ~replace_na(., 0))) %>% view("sin NA")
+
+#Adding a row which contain the sum by column
+
+table_sum_bycolumn<-pivot_tablafinal_df %>% select(-Canton) %>% 
+  summarise(across(everything(), sum)) %>% view("sum")
+
+
+#Tabla final que resume el número total de empresas por actividad económica y 
+#por actividad económica por cantón
+
+table_summarize<- pivot_tablafinal_df %>% bind_rows(table_sum_bycolumn) %>% 
+  view("Tabla_resumen")
+
+
+#Table como un tibble y nombra la fila NA que es el TOTAL
+
+total_count<- "Total" 
+table_Resumen_final<-table_summarize %>% 
+  mutate(Canton=ifelse(is.na(Canton),total_count , Canton))  %>% 
+  view("Tabla_resumen1")
+glimpse(table_Resumen_final)
+```
+
+La Tabla 2 resalta claramente los dos cantones con el mayor número de empresas, sin importar su actividad económica: Guayaquil y Quito. Para ilustrar, en el campo de actividades relacionadas con el comercio al por mayor y menor, además de la reparación de vehículos y automotores, se destaca que Quito alberga 5124 empresas, mientras que Guayaquil cuenta con 3860 empresas, de un total de 11717 empresas involucradas en esta actividad. En términos porcentuales, esto representa el 43.7% y el 32.9%, respectivamente, en estas dos ciudades. El restante 23.3% corresponde a otros 137 cantones que también participan en esta actividad empresarial.
+
+***Tabla 2. Empresas por Actividad y Cantón***
+
+![](C:\Users\erika\Documents\R\ProyectoR_G4\info\imagen_empresas.png){width="500px," height="300px"}
+
+
+
+--------------------------------------------------------------
+
+### Análisis Financiero
+
+En el análisis financiero que llevaremos a cabo en relación a las empresas ecuatorianas, nos centraremos exclusivamente en aquellas que se encuentran en estado activo en sus operaciones. Esto se debe a que las empresas con otros estados, como inactivas o parcialmente activas por diversas razones, serán excluidas de los análisis subsiguientes. Esta selección nos permitirá concentrarnos en un conjunto coherente y representativo de empresas en funcionamiento pleno para obtener resultados más precisos y significativos.
+
+En el análisis inicial de las empresas a nivel nacional, uno de los indicadores primordiales que examinamos es la **Liquidez Corriente**. Al observar la Gráfica 1, podemos identificar que las provincias de Manabí, Galápagos, Pichincha, Zamora Chinchipe y Azuay se destacan por presentar un promedio de liquidez corriente notablemente superior. Esto sugiere que las empresas en estas provincias podrían tener una mejor capacidad para hacer frente a sus compromisos financieros a corto plazo.
+
+
+```{r , echo=FALSE}
+
+#Gráfica_1 de Liquidez Corriente por Status Activa y Provincia
+
+status_activa_liquidez_corriente <- empresas %>%
+  dplyr::filter(Status == "ACTIVA" & !is.na(Liquidez_Corriente) & is.finite(Liquidez_Corriente)) %>%
+  group_by(Provincia) %>%
+  summarize(Mean_Liquidez_Corriente = mean(Liquidez_Corriente),
+            .groups = "drop")
+
+Grafica_1 <-ggplot(status_activa_liquidez_corriente, aes(x = reorder(Provincia, -Mean_Liquidez_Corriente), y = Mean_Liquidez_Corriente)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "#4CAF50") +
+  geom_text(aes(label = round(Mean_Liquidez_Corriente, 2)),
+            vjust = -0.3, color = "black", size = 2) +
+  labs(title = "Gráfica 1.Liquidez Corriente Promedio por Provincia (Status: Activa)",
+       x = "Provincia", y = "Liquidez Corriente Promedio") +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1,size =6),
+        axis.title.y = element_text(margin = margin(r = 10)),
+        plot.title = element_text(hjust = 0.5, size =8))
+plot(Grafica_1)
+```
+Siguiendo con nuestra exploración, avanzamos hacia el análisis de la Solvencia de las empresas en Ecuador. Para ello, iniciamos por examinar el **endeudamiento del activo promedio**, segmentado por provincia. La Gráfica 2 ofrece una representación visual de este análisis, indicando que las provincias con mayor endeudamiento del activo promedio son Santo Domingo de los Tsáchilas, Esmeraldas y Chimborazo. Esto sugiere que las empresas en estas provincias pueden estar dependiendo en mayor medida de financiamiento por deuda para respaldar sus operaciones y activos.
+
+Continuamos con el análisis del **Endeudamiento Patrimonial** de las empresas del Ecuador, en donde encontramos que las empresas de las Provincias de Guayas, Azuay, Galápagos, Tungurahua y Los Ríos tienen el mayor endeudamiento patrimonial Promedio,este hecho podría sugerir que las empresas en estas áreas tienden a depender en mayor medida de fuentes de financiamiento externo en comparación con sus recursos propios. Esto puede llevar a un mayor riesgo financiero y la necesidad de gestionar cuidadosamente la deuda para mantener la estabilidad financiera a largo plazo. (Ver Gráfica 3)
+```{r , echo=FALSE}
+#Grafica_2 de Solvencia por Status Activa y Provincia: Endeudamiento Activo
+status_activa_endeu_activo <- empresas %>%
+  dplyr::filter(Status == "ACTIVA" & !is.na(Endeudamiento_activo) & is.finite(Endeudamiento_activo)) %>%
+  group_by(Provincia) %>%
+  summarize(Mean_Endeudamiento_activo = mean(Endeudamiento_activo),
+            .groups = "drop")
+
+Grafica_2<-ggplot(status_activa_endeu_activo, aes(x = reorder(Provincia, -Mean_Endeudamiento_activo), y = Mean_Endeudamiento_activo)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "purple") +
+  geom_text(aes(label = round(Mean_Endeudamiento_activo , 2)),
+            vjust = -0.3, color = "black", size = 2) +
+  labs(title = "Gráfica 2. Endeudamiento Activo Promedio por Provincia (Status: Activa)",
+       x = "Provincia", y = "Endeudamiento Activo Promedio") +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1, size=6),
+        axis.title.y = element_text(margin = margin(r = 10)),
+        plot.title = element_text(hjust = 0.5, size =8))
+
+#Grafica_3 de Solvencia por Status y Provincia: Endeudamiento Patrimonial
+status_activa_endeu_patrimonial <- empresas %>%
+  dplyr::filter(Status == "ACTIVA" & !is.na(Endeudamiento_patrimonial) & is.finite(Endeudamiento_patrimonial)) %>%
+  group_by(Provincia) %>%
+  summarize(Mean_Endeudamiento_patrimonial = mean(Endeudamiento_patrimonial),
+            .groups = "drop")
+
+Grafica_3<-ggplot(status_activa_endeu_patrimonial, aes(x = reorder(Provincia, -Mean_Endeudamiento_patrimonial), y = Mean_Endeudamiento_patrimonial)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "blue") +
+  geom_text(aes(label = round(Mean_Endeudamiento_patrimonial , 2)),
+            vjust = -0.3, color = "black", size = 2) +
+  labs(title = "Gráfica 3.Endeudamiento Patrimonial Promedio por Provincia (Status: Activa)",
+       x = "Provincia", y = "Endeudamiento Patrimonial Promedio") +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1, size =6),
+        axis.title.y = element_text(margin = margin(r = 10)),
+        plot.title = element_text(hjust = 0.5, size =8))
+plot(Grafica_2)
+plot(Grafica_3)
+```
+Seguimos con el analisis del **endeudamiento del activo fijo** y al observar la Gráfica 4 nos revela que las empresas de las Provincias de Guayas, Pichincha, Galápagos, Imbabura y Santa Elena tienen el mayor endeudamiento de activo fijo promedio. En el contexto de las provincias mencionadas, el alto endeudamiento del activo fijo promedio podría indicar que las empresas en estas áreas están usando financiamiento externo para adquirir y mantener sus activos fijos.
+
+Continuando con el análisis del **Apalancamiento Promedio**, podemos observar que las empresas con un mayor nivel de apalancamiento están localizadas en las provincias de Guayas, Azuay, Galápagos, Tungurahua y Los Ríos.En el escenario de las provincias mencionadas, un mayor apalancamiento sugiere que las empresas en estas áreas están utilizando una proporción considerable de financiamiento externo para respaldar sus operaciones y crecimiento. Si bien el apalancamiento puede potencialmente aumentar los rendimientos en momentos favorables, también puede incrementar los riesgos en periodos de incertidumbre económica. (Ver Gráfica 5)
+
+```{r , echo=FALSE}
+#Grafica_4 de Solvencia por Status Activa y Provincia:Endeudamiento_Activo_Fijo
+status_activa_endeu_actfijo <- empresas %>%
+  dplyr::filter(Status == "ACTIVA" & !is.na(Endeudamiento_activo_fijo) & is.finite(Endeudamiento_activo_fijo)) %>%
+  group_by(Provincia) %>%
+  summarize(Mean_Endeudamiento_actfijo = mean(Endeudamiento_activo_fijo),
+            .groups = "drop")
+
+Grafica_4<-ggplot(status_activa_endeu_actfijo, aes(x = reorder(Provincia, -Mean_Endeudamiento_actfijo), y = Mean_Endeudamiento_actfijo)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "orange") +
+  geom_text(aes(label = round(Mean_Endeudamiento_actfijo , 2)),
+            vjust = -0.3, color = "black", size = 2) +
+  labs(title = "Gráfica 4. Endeudamiento Activo Fijo Promedio por Provincia (Status: Activa)",
+       x = "Provincia", y = "Endeudamiento Activo fijo Promedio") +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1, size =6),
+        axis.title.y = element_text(margin = margin(r = 10)),
+        plot.title = element_text(hjust = 0.5,size =8))
+
+#Grafica_5 de Solvencia por Status Activa y Provincia:Apalancamiento
+status_activa_apala <- empresas %>%
+  dplyr::filter(Status == "ACTIVA" & !is.na(Apalancamiento) & is.finite(Apalancamiento)) %>%
+  group_by(Provincia) %>%
+  summarize(Mean_apala = mean(Apalancamiento),
+            .groups = "drop")
+
+options(repr.plot.height = 2)
+Grafica_5<- ggplot(status_activa_apala, aes(x = reorder(Provincia, -Mean_apala), y = Mean_apala)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "brown") +
+  geom_text(aes(label = round(Mean_apala , 2)),
+            vjust = -0.3, color = "black", size = 2) +
+  labs(title = "Gráfica 5.Apalancamiento Promedio por Provincia (Status: Activa)",
+       x = "Provincia", y = "Apalancamiento Promedio") +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1, size =6),
+        axis.title.y = element_text(margin = margin(r = 10)),
+        plot.title = element_text(hjust = 0.5, size= 8))
+plot(Grafica_4)
+plot(Grafica_5)
+```
+Siguiendo con nuestro análisis financiero, nos enfocaremos en los distintos tipos de empresas presentes en el país. Basándonos en el **Indice de Liquidez Corriente**, hemos identificado que las empresas de Responsabilidad Limitada y Anónimas son las que presentan el índice de liquidez promedio más elevado. Este indicador puede reflejar que estas estructuras empresariales están gestionando sus activos y pasivos de manera efectiva. Esto podría indicar una mayor eficiencia en la administración de sus recursos y la capacidad para responder a sus obligaciones financieras sin dificultad.
+
+```{r , echo=FALSE}
+#Grafico_6 de Liquidez Corriente por tipo de empresa
+
+x <- empresas %>%
+  dplyr::filter(is.finite(Liquidez_Corriente)) %>%
+  group_by(Tipo_de_empresa) %>% 
+  summarize(Mean_Liquidez_Corriente = mean(Liquidez_Corriente, na.rm = TRUE))
+
+Grafica_6<- ggplot(x, aes(x = Mean_Liquidez_Corriente, y = reorder(Tipo_de_empresa, -Mean_Liquidez_Corriente))) +
+  geom_bar(stat = "identity", fill = "#5DADE2") +
+  geom_text(aes(label = round(Mean_Liquidez_Corriente, 2)),
+            vjust = -0.3, color = "black", size = 2.5) +
+  labs(title = "Gráfica 6. Liquidez Corriente promedio por tipo de empresa",
+       x = "Promedio de Índice de Liquidez Corriente", y = "Tipo de Empresa") +
+  scale_fill_discrete(name = "Tipo de Empresa") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, vjust = 0.5),
+        axis.title.y = element_blank(),  # Remover título del eje Y
+        plot.title = element_text(hjust = 0.5, size = 8, face = "bold"),
+        panel.grid.major.x = element_blank(),  # Remover líneas de la grilla
+        panel.grid.minor = element_blank(),  # Remover líneas de la grilla
+        panel.border = element_rect(color = "black", fill = NA),  # Agregar borde al gráfico
+        legend.position = "none")  
+
+#Grafica_7 de Solvencia por Tipo de Empresa: Endeudamiento Activo
+
+y<-empresas %>%
+  dplyr::filter(is.finite(Endeudamiento_activo)) %>%
+  group_by(Tipo_de_empresa) %>% 
+  summarize(Mean_Endeudamiento_activo = mean(Endeudamiento_activo, na.rm = TRUE))
+
+Grafica_7<- ggplot(y, aes(x = Mean_Endeudamiento_activo, y = reorder(Tipo_de_empresa, -Mean_Endeudamiento_activo))) +
+  geom_bar(stat = "identity", fill = "yellow") +
+  geom_text(aes(label = round(Mean_Endeudamiento_activo, 2)),
+            vjust = -0.3, color = "black", size = 2.5) +
+  labs(title = "Gráfica 7.Endeudamiento activo promedio por Tipo de Empresa",
+       x = "Promedio de Índice de Endeudamiento activo", y = "Tipo de Empresa") +
+  scale_fill_discrete(name = "Tipo de Empresa") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, vjust = 0.5),
+        axis.title.y = element_blank(),  # Remover título del eje Y
+        plot.title = element_text(hjust = 0.5, size = 8, face = "bold"),
+        panel.grid.major.x = element_blank(),  # Remover líneas de la grilla
+        panel.grid.minor = element_blank(),  # Remover líneas de la grilla
+        panel.border = element_rect(color = "black", fill = NA),  # Agregar borde al gráfico
+        legend.position = "none")   
+grid.arrange(Grafica_6, Grafica_7, ncol = 1,nrow = 2) 
+```
+Prosiguiendo con los indices de solvencia, analizaremos primeramente el **endeudamiento del activo**, en la Gráfica 7 observamos que las Sucursales Extranjeras presentan un índice de endeudamiento del activo más alto. Esto puede sugerir que estas empresas están utilizando financiamiento externo en mayor medida para respaldar sus operaciones. En contraste, las empresas de Responsabilidad Limitada y Anónimas muestran un menor índice de endeudamiento del activo, lo que podría señalar una dependencia menor de fuentes de financiamiento externo.
+
+```{r , echo=FALSE}
+
+```
+
+Ahora veremos el **endeudamiento patrimonial** y observamos que las empresas de Sucursal extranjera presenta el mayor indice de endeudamiento patrimonial seguido por las empresas de Responsabilidad Limitas y las Anónimas. Esto podría indicar que estas empresas confían más en fuentes externas de financiamiento para respaldar sus operaciones en comparación con su inversión interna. Por otro lado, las empresas de Responsabilidad Limitada y las Anónimas presentan índices menores de endeudamiento patrimonial, indicando un menor grado de dependencia de financiamiento externo.(Ver Gráfica 8)
+
+Segun el **endeudamiento de activo fijo** las empresas con mayor endeudamiento de activo fijo promedio son las de Sociedad Anónima. Este indicador proporciona una visión clara de la proporción de financiamiento proveniente de fuentes externas, como deudas y préstamos, que estas empresas emplean para adquirir y mantener sus activos fijos. Estos activos fijos comprenden elementos esenciales como propiedades, equipos y recursos necesarios para respaldar sus operaciones y funciones clave. (Ver Gráfica 9)
+
+```{R, echo=FALSE }
+#Grafica_8 de Solvencia por Tipo de Empresa: Endeudamiento Patrimonial
+p<-empresas %>%
+  dplyr::filter(is.finite(Endeudamiento_patrimonial)) %>%
+  group_by(Tipo_de_empresa) %>% 
+  summarize(Mean_Endeudamiento_patrimonial = mean(Endeudamiento_patrimonial, na.rm = TRUE))
+
+Grafica_8<- ggplot(p, aes(x = Mean_Endeudamiento_patrimonial, y = reorder(Tipo_de_empresa, -Mean_Endeudamiento_patrimonial))) +
+  geom_bar(stat = "identity", fill = "green") +
+  geom_text(aes(label = round(Mean_Endeudamiento_patrimonial, 2)),
+            vjust = -0.3, color = "black", size = 2.5) +
+  labs(title = "Gráfica 8. Endeudamiento patrimonial promedio por Tipo de Empresa",
+       x = "Promedio de Índice de Endeudamiento patrimonial", y = "Tipo de Empresa") +
+  scale_fill_discrete(name = "Tipo de Empresa") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, vjust = 0.5),
+        axis.title.y = element_blank(),  # Remover título del eje Y
+        plot.title = element_text(hjust = 0.5, size = 8, face = "bold"),
+        panel.grid.major.x = element_blank(),  # Remover líneas de la grilla
+        panel.grid.minor = element_blank(),  # Remover líneas de la grilla
+        panel.border = element_rect(color = "black", fill = NA),  # Agregar borde al gráfico
+        legend.position = "none") 
+
+#Grafica_9 de Solvencia por Tipo de Empresa: Endeudamiento_Activo_Fijo
+
+act_fijo<-empresas %>%
+  dplyr::filter(is.finite(Endeudamiento_activo_fijo)) %>%
+  group_by(Tipo_de_empresa) %>% 
+  summarize(Mean_Endeudamiento_activo_fijo = mean(Endeudamiento_activo_fijo, na.rm = TRUE)) 
+
+Gráfica_9<- ggplot(act_fijo, aes(x = Mean_Endeudamiento_activo_fijo, y = reorder(Tipo_de_empresa, -Mean_Endeudamiento_activo_fijo))) +
+  geom_bar(stat = "identity", fill = "turquoise") +
+  geom_text(aes(label = round(Mean_Endeudamiento_activo_fijo, 2)),
+            vjust = -0.3, color = "black", size = 2.5) +
+  labs(title = "Gráfica 9. Endeudamiento activo fijo promedio por Tipo de Empresa",
+       x = "Promedio de Índice de Endeudamiento activo fijo", y = "Tipo de Empresa") +
+  scale_fill_discrete(name = "Tipo de Empresa") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, vjust = 0.5),
+        axis.title.y = element_blank(),  # Remover título del eje Y
+        plot.title = element_text(hjust = 0.5, size = 8, face = "bold"),
+        panel.grid.major.x = element_blank(),  # Remover líneas de la grilla
+        panel.grid.minor = element_blank(),  # Remover líneas de la grilla
+        panel.border = element_rect(color = "black", fill = NA),  # Agregar borde al gráfico
+        legend.position = "none") 
+grid.arrange(Grafica_8, Gráfica_9, ncol = 1, nrow=2) 
+```
+Para culminar con el análisis financiero en lo que respecta a los tipos de empresas, prestamos atención al **Apalancamiento** promedio. Se nota que las empresas con estatus de Sucursal Extranjera exhiben un nivel de apalancamiento superior en comparación con otros tipos de empresas, tal como se refleja en la Gráfica 10. Este mayor Apalancamiento promedio de las empresas de Sucursal Extranjera sugiere que estas compañías dependen más significativamente de fuentes externas de financiamiento para respaldar sus operaciones y estrategias de crecimiento. Este enfoque puede ofrecer ventajas para la expansión, pero también implica una mayor responsabilidad financiera y riesgo, especialmente en períodos de incertidumbre económica.
+
+```{R, echo=FALSE }
+#Grafica_10 de Solvencia por Tipo de Empresa: Apalancamiento
+
+
+apa<-empresas %>%
+  dplyr::filter(is.finite(Apalancamiento)) %>%
+  group_by(Tipo_de_empresa) %>% 
+  summarize(Mean_Apalancamiento = mean(Apalancamiento, na.rm = TRUE)) 
+9
+Gráfica_10<- ggplot(apa, aes(x = Mean_Apalancamiento, y = reorder(Tipo_de_empresa, -Mean_Apalancamiento))) +
+  geom_bar(stat = "identity", fill = "purple") +
+  geom_text(aes(label = round(Mean_Apalancamiento, 2)),
+            vjust = -0.3, color = "black", size = 2.5) +
+  labs(title = "Gráfica 10. Apalancamiento promedio por Tipo de Empresa",
+       x = "Promedio de Índice de Apalancamiento", y = "Tipo de Empresa") +
+  scale_fill_discrete(name = "Tipo de Empresa") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, vjust = 0.5),
+        axis.title.y = element_blank(),  # Remover título del eje Y
+        plot.title = element_text(hjust = 0.5, size = 8, face = "bold"),
+        panel.grid.major.x = element_blank(),  # Remover líneas de la grilla
+        panel.grid.minor = element_blank(),  # Remover líneas de la grilla
+        panel.border = element_rect(color = "black", fill = NA),  # Agregar borde al gráfico
+        legend.position = "none") 
+plot(Gráfica_10)
+```
+
+------------------------------------------------------------------------
+
+**Preguntas de Investigación**
+
+1.  ***¿El endeudamiento del activo fue mayor en empresas micro + pequeñas vs. grandes?***
+
+El promedio del endeudamiento del activo de las micro + pequeñas empresas en el Ecuador es significativamente mayor que el de las grandes empresas. Mientras que las micro + pequeñas empresas tienen un promedio de endeudamiento del activo del 3,42 las grandes empresas registran un indice de 0,88. Esta información resalta una diferencia importante en cómo estas dos categorías de empresas financian sus operaciones a través de deudas en relación con sus activos.(Ver Tabla 3)
+
+| **Tabla 3. Endeudamiento de activo Promedio por Tamaño de Empresa**                                                     |
+|------------------------------------------------------------------------|
+| ![Imagen No.3](C:/Users/erika/Documents/R/ProyectoR_G4/info/micro_vs_grandes.png){width="500px" height="300px"} |
+
+| **Tabla 4. Liquidez por tipo de compañía**                                                                                  |
+|------------------------------------------------------------------------|
+| ![Imagen No.4](C:/Users/erika/Documents/R/ProyectoR_G4/info/empresas_micro_grand.png){width="500px" height="300px"} |
+
+2.  ***¿La liquidez por tipo de compañía es diferente entre aquellas empresas que tienen más de 60 trabajadores directos y que cuenta con 100 a 800 trabajadores administrativos?***
+
+El promedio de liquidez de las empresas anónimas que tienen mas de 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos es de 1,95 a diferencia de las otras empresas anónimas con menos trabajadores que tienen un indice promedio de liquidez de 16,40 y aunque este índice muestra una mayor capacidad de este ultimo grupo de empresas para hacer frente a sus vencimientos de corto plazo, un exceso de liquidez puede significar que la empresa no está invirtiendo eficientemente sus recursos, lo que podría afectar su rentabilidad a largo plazo.
+
+Por otro lado, el promedio de liquidez de las empresas de Sucursal extranjera, que tienen más de 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos, es de 2,60. En contraste con las empresas de sucursal extranjera con menos personal que tienen un índice de 9,45. Este coeficiente de liquidez más alto sugiere que estas últimas empresas extranjeras tendrán mayores posibilidades de efectuar sus pagos de corto plazo de manera oportuna y solvente.(Ver Tabla 4)
+
+Tambien podemos indicar que las empresas anonimas con las de 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos tienen un índice promedio de 0,56 de endeudamiento del activo vs a las de menos trabajadores que tienen un 0,94. Asi tambien podemos apreciar en la Tabla 4 que las Empresas de Sucursal Extranjera que cuentan con 60 trabajadores directivos y que cuentan con 100 a 800 trabajadores administrativos muestran un endeudamiento del activo promedio de 0,94 versus las que tienen menos trabajadores que muestran 2.92 endeudamiento del activo.
+
+3.  ***Descripción del top 10 de empresas con mayor apalancamiento***
+
+En el Top 10 de las empresas con mayor apalancamiento en su mayoria son empresas Anónimas micro o pequeñas empresas y que se encuentran activas asi como podemos indicar que 7 de estas se encuentran ubicadas en la provincia del Guayas y cuentan en promedio con 1 directivo y como que tienen maximo 5 trabajadores administrativos.(Ver Tabla 5)\
+***Tabla 4. Top 10 de empresas con mayor apalancamiento***\
+![Imagen No.5](C:\Users\erika\Documents\R\ProyectoR_G4\info\top_empresas.png){width="500px," height="300px"}
+
+### Conclusión
+
+Después de contestar las tres preguntas iniciales y visualizando las correspondientes tablas y gráficos a lo largo del desarrollo de este Proyecto final del Modulo R que fue trabajado sobre la base de Balances 2014 de la Superintendencia de Compañias, podemos concluir lo siguiente en relacion a las empresas en el Ecuador.
+
+-   Las empresas micro + pequeñas en Ecuador tienden a mostrar un mayor endeudamiento en relación con su activo en comparación con las empresas grandes. Esto puede indicar diferentes enfoques de financiamiento según el tamaño.
+
+-   Las empresas anónimas con más trabajadores directivos y administrativos presentan un índice de liquidez menor en comparación con las empresas con menos personal. Las empresas más grandes pueden tener una posición financiera más sólida y, por lo tanto, menos necesidad inmediata de liquidez.
+
+-   Las sucursales extranjeras con más personal directivo y administrativo tienden a tener un coeficiente de liquidez más alto en comparación con las que tienen menos personal. Esto sugiere una mejor capacidad para cumplir con los compromisos financieros a corto plazo.
+
+En resumen, las empresas en Ecuador, especialmente las micro + pequeñas, pueden depender más del endeudamiento. Las empresas más grandes pueden tener una flexibilidad financiera superior y mantener niveles más altos de liquidez. Las sucursales extranjeras con más personal parecen estar mejor preparadas para enfrentar sus obligaciones financieras a corto plazo. Estas conclusiones se basan en análisis de datos y podrían variar según factores específicos de la industria y el contexto económico.
